@@ -35,7 +35,7 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <h1>Site da Campanha de Popular Solidariedade do Rio Grande do Sul</h1>
+      <h1>Site da Campanha Popular de Solidariedade do Rio Grande do Sul</h1>
 
       <pre className="max-w-md">{JSON.stringify(data, null, 2)}</pre>
     </main>
