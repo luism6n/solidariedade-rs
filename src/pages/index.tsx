@@ -1,10 +1,7 @@
 "use client";
 
-import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
-import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
-
-const inter = Inter({ subsets: ["latin"] });
+import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function Home() {
   const [data, setData] = useState<string | null>(null);
@@ -29,30 +26,38 @@ export default function Home() {
   }
 
   if (!data) {
-    return <p>loading...</p>;
+    return <p>Carregando...</p>;
   }
 
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between ${inter.className}`}
-    >
-      <header className="p-lg bg-rose-700 w-full flex flex-col gap-lg">
-        <div className="w-full flex justify-between items-center">
-          <div className="font-bold text-xl uppercase w-full text-white">
-            <h1>Solidariedade</h1>
-            <h2 className="bg-gray-700 max-w-fit p-1 rounded-md">
-              Rio Grande do Sul
-            </h2>
+    <div>
+      <header className="w-full">
+        <div className="p-lg bg-rose-700 flex flex-col gap-lg">
+          <div className="w-full flex justify-between items-center">
+            <div className="font-extrabold text-xl uppercase w-full text-white">
+              <h1 className="p-1">Solidariedade</h1>
+              <h2 className="bg-stone-700 max-w-fit p-1 rounded-md">
+                Rio Grande do Sul
+              </h2>
+            </div>
+            <PiInfo className="text-4xl" color="white" />
           </div>
-          <PiInfo className="text-4xl" color="white" />
+          <div className="bg-white flex gap-md rounded-md p-md items-center">
+            <input
+              type="text"
+              className="w-full"
+              placeholder="Buscar por abrigo ou endereço"
+            />
+            <PiMagnifyingGlassBold className="text-2xl" />
+          </div>
         </div>
-        <div className="bg-white flex gap-md p-md items-center">
-          <input type="text" className="w-full" />
-          <PiMagnifyingGlassBold className="text-2xl" />
+        <div className="flex gap-lg justify-center bg-stone-700 text-white p-md items-center">
+          <p>Filtros de busca</p>
+          <PiCaretDownFill />
         </div>
       </header>
 
-      <pre className="max-w-md">{JSON.stringify(data, null, 2)}</pre>
-    </main>
+      <pre className="overflow-x-scroll">{JSON.stringify(data, null, 2)}</pre>
+    </div>
   );
 }
