@@ -1,4 +1,4 @@
-# RSRS - Rede Solidário do Rio Grande do Sul
+# Site da Campanha Popular de Solidariedade do Rio Grande do Sul
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
