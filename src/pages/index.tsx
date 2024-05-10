@@ -1,5 +1,6 @@
 "use client";
 
+import ShelterCard from "@/components/ShelterCard";
 import { SheetData } from "@/types";
 import { useEffect, useState } from "react";
 import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
@@ -37,7 +38,7 @@ export default function Home() {
   } = data;
 
   return (
-    <div>
+    <body>
       <header className="w-full">
         <div className="p-lg bg-rose-700 flex flex-col gap-lg">
           <div className="w-full flex justify-between items-center">
@@ -64,36 +65,19 @@ export default function Home() {
         </div>
       </header>
 
-      {/* map cols to labels and rows use rows as values in a card without styling */}
+      <div className="MAP h-72 w-full bg-yellow-400">MAPA</div>
+      <div className="bg-green-400 p-lg font-semibold text-white">
+        Ver lista
+      </div>
+      <div className="bg-green-400 p-lg font-semibold text-white">Ver mapa</div>
+
       <main className="p-lg">
         <div className="grid grid-cols-1 gap-lg">
           {rows.map((row, i) => {
-            return (
-              <div key={i} className="bg-white p-md rounded-md">
-                {cols.map((col, j) => {
-                  if (col.label.startsWith("[ignore]")) {
-                    return null;
-                  }
-
-                  // strip any [x] from col label
-                  const label = col.label.replace(/\[.*\]/, "").trim();
-
-                  if (!row.c[j]?.v) {
-                    return null;
-                  }
-
-                  return (
-                    <p key={j}>
-                      <span className="font-semibold">{label}: </span>
-                      {row.c[j]?.v}
-                    </p>
-                  );
-                })}
-              </div>
-            );
+            return <ShelterCard key={i} row={row} cols={cols} />;
           })}
         </div>
       </main>
-    </div>
+    </body>
   );
 }
