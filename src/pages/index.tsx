@@ -42,7 +42,7 @@ export default function Home() {
         <div className="p-lg bg-rose-700 flex flex-col gap-lg">
           <div className="w-full flex justify-between items-center">
             <div className="font-extrabold text-xl uppercase w-full text-white">
-              <h1 className="p-1">Solidariedade</h1>
+              <h1 className="p-1">Campanha Popular de Solidariedade</h1>
               <h2 className="bg-stone-700 max-w-fit p-1 rounded-md">
                 Rio Grande do Sul
               </h2>
