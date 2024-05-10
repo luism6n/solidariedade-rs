@@ -1,9 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { GoogleSheet, Sheet } from "@/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  sheet: any;
-};
+type Data = Sheet;
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,5 +39,20 @@ export default async function handler(
     return;
   }
 
-  res.send({ sheet: JSON.parse(jsonString) });
+  const googleSheetData = JSON.parse(jsonString) as GoogleSheet;
+  console.log(googleSheetData.table);
+  const data: Sheet = {
+    cols: googleSheetData.table.cols.map((col) => ({
+      // extract tags from col.label ([x] [y] [z] name => [x, y, z] name)
+      tags:
+        col.label.match(/\[.*?\]/g)?.map((tag) => tag.replace(/[\[\]]/g, "")) ||
+        [],
+      name: col.label,
+    })),
+    rows: googleSheetData.table.rows.map((row) => ({
+      cells: row.c.map((cell) => cell?.v),
+    })),
+  };
+
+  res.send(data);
 }

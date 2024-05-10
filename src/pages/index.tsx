@@ -1,11 +1,11 @@
 "use client";
 
-import { SheetData } from "@/types";
+import { Sheet } from "@/types";
 import { useEffect, useState } from "react";
 import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function Home() {
-  const [data, setData] = useState<SheetData | null>(null);
+  const [data, setData] = useState<Sheet | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,11 +30,7 @@ export default function Home() {
     return <p>Carregando...</p>;
   }
 
-  const {
-    sheet: {
-      table: { cols, rows },
-    },
-  } = data;
+  const { cols, rows } = data;
 
   return (
     <div>
@@ -71,21 +67,21 @@ export default function Home() {
             return (
               <div key={i} className="bg-white p-md rounded-md">
                 {cols.map((col, j) => {
-                  if (col.label.startsWith("[ignore]")) {
+                  if (col.tags.includes("ignore")) {
                     return null;
                   }
 
                   // strip any [x] from col label
-                  const label = col.label.replace(/\[.*\]/, "").trim();
+                  const label = col.name;
 
-                  if (!row.c[j]?.v) {
+                  if (!row.cells[j]) {
                     return null;
                   }
 
                   return (
                     <p key={j}>
                       <span className="font-semibold">{label}: </span>
-                      {row.c[j]?.v}
+                      {row.cells[j]}
                     </p>
                   );
                 })}
