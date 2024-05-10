@@ -1,10 +1,11 @@
 "use client";
 
+import { SheetData } from "@/types";
 import { useEffect, useState } from "react";
 import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function Home() {
-  const [data, setData] = useState<string | null>(null);
+  const [data, setData] = useState<SheetData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,6 +29,12 @@ export default function Home() {
   if (!data) {
     return <p>Carregando...</p>;
   }
+
+  const {
+    sheet: {
+      table: { cols, rows },
+    },
+  } = data;
 
   return (
     <div>
@@ -57,7 +64,36 @@ export default function Home() {
         </div>
       </header>
 
-      <pre className="overflow-x-scroll">{JSON.stringify(data, null, 2)}</pre>
+      {/* map cols to labels and rows use rows as values in a card without styling */}
+      <main className="p-lg">
+        <div className="grid grid-cols-1 gap-lg">
+          {rows.map((row, i) => {
+            return (
+              <div key={i} className="bg-white p-md rounded-md">
+                {cols.map((col, j) => {
+                  if (col.label.startsWith("[ignore]")) {
+                    return null;
+                  }
+
+                  // strip any [x] from col label
+                  const label = col.label.replace(/\[.*\]/, "").trim();
+
+                  if (!row.c[j]?.v) {
+                    return null;
+                  }
+
+                  return (
+                    <p key={j}>
+                      <span className="font-semibold">{label}: </span>
+                      {row.c[j]?.v}
+                    </p>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </main>
     </div>
   );
 }

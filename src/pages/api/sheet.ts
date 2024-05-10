@@ -12,7 +12,7 @@ export default async function handler(
   console.log("new request");
 
   const sheetResponse = await fetch(
-    "https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/gviz/tq?tqx=out:json&sheet=PLANILHA"
+    "https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/gviz/tq?tqx=out:json&range=PLANILHA!A2:ZZ"
   );
 
   if (sheetResponse.status !== 200) {
