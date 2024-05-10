@@ -1,12 +1,12 @@
 "use client";
 
-import ShelterCard from "@/components/ShelterCard";
-import { SheetData } from "@/types";
+import Card from "@/components/Card";
+import { Sheet } from "@/types";
 import { useEffect, useState } from "react";
 import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function Home() {
-  const [data, setData] = useState<SheetData | null>(null);
+  const [data, setData] = useState<Sheet | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,11 +31,7 @@ export default function Home() {
     return <p>Carregando...</p>;
   }
 
-  const {
-    sheet: {
-      table: { cols, rows },
-    },
-  } = data;
+  const { cols, rows } = data;
 
   return (
     <body>
@@ -74,7 +70,7 @@ export default function Home() {
       <main className="p-lg">
         <div className="grid grid-cols-1 gap-lg">
           {rows.map((row, i) => {
-            return <ShelterCard key={i} row={row} cols={cols} />;
+            return <Card key={i} cols={cols} row={row} />;
           })}
         </div>
       </main>

@@ -1,33 +1,44 @@
-export interface SheetData {
-  sheet: Sheet;
+export interface Sheet {
+  cols: Col[];
+  rows: Row[];
 }
 
-export interface Sheet {
+export interface Col {
+  tags: string[];
+  name: string;
+}
+
+export interface Row {
+  cells: string[];
+}
+
+// Google Sheet API response types
+export interface GoogleSheet {
   version: string;
   reqId: string;
   status: string;
   sig: string;
-  table: Table;
+  table: GoogleSheetTable;
 }
 
-export interface Table {
-  cols: Col[];
-  rows: Row[];
+export interface GoogleSheetTable {
+  cols: GoogleSheetCol[];
+  rows: GoogleSheetRow[];
   parsedNumHeaders: number;
 }
 
-export interface Col {
+export interface GoogleSheetCol {
   id: string;
   label: string;
   type: string;
   pattern?: string;
 }
 
-export interface Row {
-  c: C[] | undefined[];
+export interface GoogleSheetRow {
+  c: GoogleSheetRowCell[] | undefined[];
 }
 
-export interface C {
+export interface GoogleSheetRowCell {
   v: any;
   f?: string;
 }
