@@ -9,7 +9,8 @@ export interface Col {
 }
 
 export interface Row {
-  cells: string[];
+  includes(searchQuery: string): unknown;
+  cells: (string | null)[];
 }
 
 // Google Sheet API response types
