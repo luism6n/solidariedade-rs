@@ -2,11 +2,21 @@ import { Cell, Col, Row } from "@/types";
 import Link from "next/link";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
+  
+  let municipio_index = 0;
+  for(var i=0; i < cols.length; i++){
+    if(cols[i].name == "Município"){
+      municipio_index = i;
+      break;
+    }
+  }
+
   return (
     <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
       {cols.map((col, i) => {
         const cell = row.cells[i];
         const label = col.name;
+        const municipio = row.cells[municipio_index];
 
         if (col.tags.includes("ignore")) {
           return null;
@@ -24,7 +34,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <p className="font-semibold underline text-stone-700" key={i}>
               <Link
-                href={`https://www.google.com/maps/search/?api=1&query=${cell}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${cell}+${municipio}`}
                 target="_blank"
                 rel="noreferrer"
               >
