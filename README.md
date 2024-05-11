@@ -4,12 +4,24 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+We're using [asdf](https://asdf-vm.com/guide/getting-started.html) to manage our node version. If you don't use asdf, you can install the node version specified in `.tool-versions` manually.
+
+## Local deployment
+
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Production deployment
+
+```bash
+npm install --omit=dev
+npm run build
+npm start
+```
+
+## General info
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
@@ -20,8 +32,6 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 We use [next-pwa](https://www.npmjs.com/package/next-pwa) to work offline using Service Workers.
-
-## Learn More
 
 We use tailwind for styling: https://nerdcave.com/tailwind-cheat-sheet
 
