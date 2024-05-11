@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { GoogleSheet, Sheet } from "@/types";
+import { Cell, GoogleSheet, Sheet } from "@/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = Sheet;
@@ -71,13 +71,13 @@ export default async function handler(
   }
 
   for (const row of googleSheetData.table.rows) {
-    const cells: (string | null)[] = [];
+    const cells: Cell[] = [];
 
     for (const cell of row.c) {
       if (!cell?.v) {
-        cells.push(null);
+        cells.push({ content: null, updatedAt: undefined, list: undefined });
       } else {
-        cells.push(cell.v);
+        cells.push({ content: cell.v, updatedAt: undefined, list: undefined });
       }
     }
 

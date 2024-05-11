@@ -9,10 +9,14 @@ export interface Col {
 }
 
 export interface Row {
-  cells: (Cell | null)[];
+  cells: Cell[];
 }
 
-export type Cell = string | number;
+export type Cell = {
+  content: string | number | null;
+  updatedAt: string | undefined;
+  list: string[] | undefined;
+};
 
 // Google Sheet API response types
 export interface GoogleSheet {

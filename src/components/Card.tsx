@@ -7,17 +7,20 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
       {cols.map((col, i) => {
         const cell = row.cells[i];
         const label = col.name;
+        const content = cell.content;
+        const updatedAt = cell.updatedAt;
+        const list = cell.list;
 
         if (col.tags.includes("ignore")) {
           return null;
         }
 
-        if (cell === null) return null;
+        if (!content) return null;
 
         if (label === "Nome") {
           return (
             <p className="font-bold text-lg" key={i}>
-              {cell}
+              {cell.content}
             </p>
           );
         } else if (label === "Endereço") {
@@ -28,7 +31,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
                 target="_blank"
                 rel="noreferrer"
               >
-                {cell}
+                {cell.content}
               </Link>
             </p>
           );
@@ -50,7 +53,7 @@ const RegularRow = ({ label, cell }: { label: string; cell: Cell }) => {
   return (
     <div className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md">
       <p>{label}: </p>
-      <p>{cell}</p>
+      <p>{cell.content}</p>
     </div>
   );
 };

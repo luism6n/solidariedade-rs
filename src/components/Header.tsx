@@ -3,8 +3,9 @@ import { useState } from "react";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 import TitleLogo from "./TitleLogo";
 
-function normalizeCellForComparison(cell: Cell) {
-  return cell
+function normalizeCellForComparison(content: Cell["content"]) {
+  if (content === null) return "";
+  return content
     .toString()
     .toLowerCase()
     .normalize("NFD")
@@ -24,10 +25,8 @@ export default function Header({ data, setSearchResults }: HeaderProps) {
       const filteredData: Sheet = {
         ...data,
         rows: data.rows.filter((row) => {
-          return row?.cells.some(
-            (cell) =>
-              cell !== null &&
-              normalizeCellForComparison(cell).includes(normalizedQuery)
+          return row?.cells.some((cell) =>
+            normalizeCellForComparison(cell.content).includes(normalizedQuery)
           );
         }),
       };
