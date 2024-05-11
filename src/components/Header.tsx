@@ -1,7 +1,42 @@
+import { Sheet } from "@/types";
+import { useState } from "react";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
-import FilterDropdown from "./FilterDropdown";
 
-export default function Header() {
+function normalizeText(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+interface HeaderProps {
+  data: Sheet;
+  setSearchResults: (filteredData: Sheet) => void;
+}
+
+export default function Header({ data, setSearchResults }: HeaderProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (value: string) => {
+    const normalizedQuery = normalizeText(value);
+    if (normalizedQuery.trim() !== "") {
+      const filteredData: Sheet = {
+        ...data,
+        rows: data.rows.filter((row) => {
+          return row?.cells.some(
+            (cell) =>
+              cell !== null && normalizeText(cell).includes(normalizedQuery)
+          );
+        }),
+      };
+
+      setSearchResults(filteredData);
+    } else {
+      setSearchResults(data);
+    }
+    setSearchQuery(value);
+  };
+
   return (
     <header className="w-full sticky top-0">
       <div className="p-md laptop:p-lg bg-rose-700 flex flex-col gap-md laptop:gap-lg">
@@ -14,18 +49,22 @@ export default function Header() {
           </div>
           <PiInfo className="text-4xl" color="white" />
         </div>
-        <div className="bg-white flex gap-md rounded-md p-md items-center">
+        <form
+          className="bg-white flex gap-md rounded-md p-md items-center"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <input
             type="text"
             className="w-full"
-            placeholder="Buscar por abrigo ou endereço"
+            placeholder="Buscar por abrigo, cidade, bairro..."
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
           />
           <button type="submit" aria-label="Buscar">
             <PiMagnifyingGlassBold className="text-2xl text-stone-700" />
           </button>
-        </div>
+        </form>
       </div>
-      <FilterDropdown />
     </header>
   );
 }

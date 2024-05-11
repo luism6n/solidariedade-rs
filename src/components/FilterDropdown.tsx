@@ -6,24 +6,44 @@ import { twMerge } from "tailwind-merge";
 import { Field, Fieldset, Input, Label, Select } from "@headlessui/react";
 
 function Filters() {
+  const [zona, setZona] = useState("");
+  const [municipio, setMunicipio] = useState("");
+  const [abrigo, setAbrigo] = useState("");
+
+  const clearFilters = () => {
+    setZona("");
+    setMunicipio("");
+    setAbrigo("");
+  };
+
   return (
     <Fieldset className="flex flex-col gap-lg">
-      {/* <Legend className="text-lg font-bold text-white">Legend</Legend> */}
       <Field>
         <Label className="block text-white">Zona</Label>
-        <Input className="w-full block" name="zona" />
+        <Input
+          className="w-full block"
+          name="zona"
+          value={zona}
+          onChange={(e) => setZona(e.target.value)}
+        />
       </Field>
       <Field>
         <Label className="block text-white">Municipio</Label>
-        <Input className="w-full block" name="municipio" />
+        <Input
+          className="w-full block"
+          name="municipio"
+          value={municipio}
+          onChange={(e) => setMunicipio(e.target.value)}
+        />
       </Field>
       <Field>
         <Label className="block text-white">Abrigo</Label>
-        <Input className="w-full block" name="abrigo" />
-      </Field>
-      <Field>
-        <Label className="block text-white">Pontos de Coleta</Label>
-        <Input className="w-full block" name="abrigo" />
+        <Input
+          className="w-full block"
+          name="abrigo"
+          value={abrigo}
+          onChange={(e) => setAbrigo(e.target.value)}
+        />
       </Field>
       <Field>
         <Label className="block text-white">Voluntários</Label>
@@ -32,29 +52,32 @@ function Filters() {
           name="voluntarios"
           aria-label="Voluntários"
         >
-          <option value="">Buscando Voluntarios</option>
+          <option value="">Buscando Voluntários</option>
           <option value="">Lotado</option>
         </Select>
       </Field>
-
-      {/* <Field>
-        <Label className="block text-white">Country</Label>
-        <Select className="w-full block" name="country">
-          <option>Canada</option>
-          <option>Mexico</option>
-          <option>United States</option>
-        </Select>
+      <Field className="flex justify-between items-center text-white">
+        <button
+          type="button"
+          onClick={clearFilters}
+          className="uppercase hover:underline"
+        >
+          Limpar Filtros
+        </button>
+        <button
+          type="submit"
+          className="bg-teal-600 p-md rounded-md uppercase hover:underline"
+        >
+          Filtrar
+        </button>
       </Field>
-      <Field>
-        <Label className="block text-white">Delivery notes</Label>
-        <Textarea className="w-full block" name="notes" />
-      </Field> */}
     </Fieldset>
   );
 }
 
 export default function FilterDropdown() {
   const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="flex w-full justify-center bg-stone-700 text-white p-md">
       <Menu>
