@@ -30,12 +30,12 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
               </a>
             </p>
           );
-        } else if (label === "Contato") {
-          return (
-            <p className="font-semibold" key={i}>
-              {cell}
-            </p>
-          );
+          // } else if (label === "Contato") {
+          //   return (
+          //     <p className="font-semibold" key={i}>
+          //       {cell}
+          //     </p>
+          //   );
         } else {
           return <RegularRow key={i} label={label} cell={cell} />;
         }
