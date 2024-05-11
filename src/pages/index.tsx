@@ -1,9 +1,9 @@
 "use client";
 
 import Card from "@/components/Card";
+import Header from "@/components/Header";
 import { Sheet } from "@/types";
 import { useEffect, useState } from "react";
-import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function Home() {
   const [data, setData] = useState<Sheet | null>(null);
@@ -35,32 +35,7 @@ export default function Home() {
 
   return (
     <body>
-      <header className="w-full">
-        <div className="p-lg bg-rose-700 flex flex-col gap-lg">
-          <div className="w-full flex justify-between items-center">
-            <div className="font-extrabold text-xl uppercase w-full text-white">
-              <h1 className="p-1">Campanha Popular de Solidariedade</h1>
-              <h2 className="bg-stone-700 max-w-fit p-1 rounded-md">
-                Rio Grande do Sul
-              </h2>
-            </div>
-            <PiInfo className="text-4xl" color="white" />
-          </div>
-          <div className="bg-white flex gap-md rounded-md p-md items-center">
-            <input
-              type="text"
-              className="w-full"
-              placeholder="Buscar por abrigo ou endereço"
-            />
-            <PiMagnifyingGlassBold className="text-2xl" />
-          </div>
-        </div>
-        <div className="flex gap-lg justify-center bg-stone-700 text-white p-md items-center">
-          <p>Filtros de busca</p>
-          <PiCaretDownFill />
-        </div>
-      </header>
-
+      <Header />
       <div className="MAP h-72 w-full bg-yellow-400">MAPA</div>
       <div className="bg-green-400 p-lg font-semibold text-white">
         Ver lista
