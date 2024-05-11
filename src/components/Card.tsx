@@ -1,4 +1,4 @@
-import { Col, Row } from "@/types";
+import { Cell, Col, Row } from "@/types";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
@@ -10,7 +10,8 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         if (col.tags.includes("ignore")) {
           return null;
         }
-        if (!cell) return null;
+
+        if (cell === null) return null;
 
         if (label === "Nome") {
           return (
@@ -44,7 +45,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   );
 }
 
-const RegularRow = ({ label, cell }: { label: string; cell: string }) => {
+const RegularRow = ({ label, cell }: { label: string; cell: Cell }) => {
   return (
     <div className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md">
       <p>{label}: </p>

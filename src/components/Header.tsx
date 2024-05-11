@@ -1,9 +1,9 @@
-import { Sheet } from "@/types";
+import { Cell, Sheet } from "@/types";
 import { useState } from "react";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 
-function normalizeText(text: string) {
-  return text
+function normalizeCellForComparison(cell: Cell) {
+  return cell
     .toString()
     .toLowerCase()
     .normalize("NFD")
@@ -18,14 +18,15 @@ export default function Header({ data, setSearchResults }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (value: string) => {
-    const normalizedQuery = normalizeText(value);
+    const normalizedQuery = normalizeCellForComparison(value);
     if (normalizedQuery.trim() !== "") {
       const filteredData: Sheet = {
         ...data,
         rows: data.rows.filter((row) => {
           return row?.cells.some(
             (cell) =>
-              cell !== null && normalizeText(cell).includes(normalizedQuery)
+              cell !== null &&
+              normalizeCellForComparison(cell).includes(normalizedQuery)
           );
         }),
       };

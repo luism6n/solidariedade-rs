@@ -9,9 +9,10 @@ export interface Col {
 }
 
 export interface Row {
-  includes(searchQuery: string): unknown;
-  cells: (string | null)[];
+  cells: (Cell | null)[];
 }
+
+export type Cell = string | number;
 
 // Google Sheet API response types
 export interface GoogleSheet {
