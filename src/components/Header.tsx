@@ -1,4 +1,5 @@
-import { PiCaretDownFill, PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
+import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
+import FilterDropdown from "./FilterDropdown";
 
 export default function Header() {
   return (
@@ -24,10 +25,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-      <div className="flex gap-lg justify-center bg-stone-700 text-white p-md items-center">
-        <p>Filtros de busca</p>
-        <PiCaretDownFill />
-      </div>
+      <FilterDropdown />
     </header>
   );
 }
