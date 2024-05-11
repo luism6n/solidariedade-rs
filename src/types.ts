@@ -6,6 +6,7 @@ export interface Sheet {
 // TODO: tags should become properties. E.g., [ignore] X -> { hidden: true }
 export interface Col {
   tags: string[];
+  // group?: string;
   name: string;
 }
 
@@ -17,7 +18,7 @@ export interface Row {
 // TODO: updatedAt should be a Date object
 export type Cell = {
   content: string | number | null;
-  updatedAt: string | undefined;
+  updatedAt?: Date;
 };
 
 // Google Sheet API response types
