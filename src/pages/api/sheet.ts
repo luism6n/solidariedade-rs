@@ -75,9 +75,9 @@ export default async function handler(
 
     for (const cell of row.c) {
       if (!cell?.v) {
-        cells.push({ content: null, updatedAt: undefined, list: undefined });
+        cells.push({ content: null, updatedAt: undefined });
       } else {
-        cells.push({ content: cell.v, updatedAt: undefined, list: undefined });
+        cells.push({ content: cell.v, updatedAt: undefined });
       }
     }
 

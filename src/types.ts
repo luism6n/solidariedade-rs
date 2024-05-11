@@ -18,7 +18,6 @@ export interface Row {
 export type Cell = {
   content: string | number | null;
   updatedAt: string | undefined;
-  list: string[] | undefined;
 };
 
 // Google Sheet API response types

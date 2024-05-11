@@ -9,7 +9,6 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         const label = col.name;
         const content = cell.content;
         const updatedAt = cell.updatedAt;
-        const list = cell.list;
 
         if (col.tags.includes("ignore")) {
           return null;
