@@ -20,7 +20,7 @@ export default function Header() {
             placeholder="Buscar por abrigo ou endereço"
           />
           <button type="submit" aria-label="Buscar">
-            <PiMagnifyingGlassBold className="text-2xl" />
+            <PiMagnifyingGlassBold className="text-2xl text-stone-700" />
           </button>
         </div>
       </div>
