@@ -1,4 +1,5 @@
 import { Cell, Col, Row } from "@/types";
+import Link from "next/link";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
@@ -22,13 +23,13 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         } else if (label === "Endereço") {
           return (
             <p className="font-semibold underline text-stone-700" key={i}>
-              <a
+              <Link
                 href={`https://www.google.com/maps/search/?api=1&query=${cell}`}
                 target="_blank"
                 rel="noreferrer"
               >
                 {cell}
-              </a>
+              </Link>
             </p>
           );
           // } else if (label === "Contato") {

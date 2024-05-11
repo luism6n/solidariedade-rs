@@ -1,6 +1,7 @@
 import { Cell, Sheet } from "@/types";
 import { useState } from "react";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
+import TitleLogo from "./TitleLogo";
 
 function normalizeCellForComparison(cell: Cell) {
   return cell
@@ -42,12 +43,7 @@ export default function Header({ data, setSearchResults }: HeaderProps) {
     <header className="w-full sticky top-0">
       <div className="p-md laptop:p-lg bg-rose-700 flex flex-col gap-md laptop:gap-lg">
         <div className="w-full flex justify-between items-center">
-          <div className="font-extrabold desktop:text-xl uppercase w-full text-white">
-            <h1 className="p-1">Campanha Popular de Solidariedade</h1>
-            <h2 className="bg-stone-700 max-w-fit p-1 rounded-md">
-              Rio Grande do Sul
-            </h2>
-          </div>
+          <TitleLogo />
           <PiInfo className="text-4xl" color="white" />
         </div>
         <form
