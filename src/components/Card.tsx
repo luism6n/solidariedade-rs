@@ -1,6 +1,30 @@
 import { Col, Row } from "@/types";
 import Link from "next/link";
 
+function formatDate(dateStr: string): Date {
+  // Extract only what's inside the parenthesis
+  const extractedContents = dateStr.match(/\(([^)]+)\)/)?.[1];
+
+  if (!extractedContents) {
+    throw new Error("Invalid date string format.");
+  }
+
+  // Split the contents by commas to get individual values
+  const [year, month, day, hour, minute, second] = extractedContents.split(",");
+
+  // Create a new Date object using the extracted values
+  const formattedDate = new Date(
+    parseInt(year),
+    parseInt(month) - 1, // Month is zero-based in JavaScript Date object
+    parseInt(day),
+    parseInt(hour),
+    parseInt(minute),
+    parseInt(second)
+  );
+
+  return formattedDate;
+}
+
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
     <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
@@ -16,21 +40,21 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return null;
         }
 
-        if (col.tags.includes("updated")) {
+        if (col.tags.includes("updated") && typeof content === "string") {
           return (
             <div
               key={i}
-              className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md"
+              className="rounded-md border border-stone-200 bg-white p-md flex gap-md"
             >
-              <p className="text-stone-700">{label}: </p>
-              <p>{new Date(content).toLocaleDateString()}</p>
+              <p className="font-semibold text-stone-700">{label}: </p>
+              <p>Updated at: {formatDate(content).toLocaleString()}</p>
             </div>
           );
         } else if (col.tags.includes("list")) {
           return (
             <div
               key={i}
-              className="font-semibold rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
+              className="rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
             >
               <p className="font-semibold text-stone-700">{label}</p>
               <ul className="list-disc list-inside">
@@ -67,11 +91,17 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={i}
-              className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md"
+              className="rounded-md border border-stone-200 bg-white p-md flex gap-md"
             >
               {/* {col.tags} */}
-              <p className="text-stone-700">{label}: </p>
+              <p className="font-semibold text-stone-700">{label}: </p>
               <p>{content}</p>
+              {/* {updatedAt && (
+                <p className="text-stone-500">
+                  (última atualização:{" "}
+                  {new Date(updatedAt).toLocaleDateString()})
+                </p>
+              )} */}
             </div>
           );
         }
