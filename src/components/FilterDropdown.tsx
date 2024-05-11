@@ -10,7 +10,6 @@ function Filters() {
   const [municipio, setMunicipio] = useState("");
   const [abrigo, setAbrigo] = useState("");
 
-  // Function to clear filter inputs
   const clearFilters = () => {
     setZona("");
     setMunicipio("");
@@ -57,12 +56,19 @@ function Filters() {
           <option value="">Lotado</option>
         </Select>
       </Field>
-      <Field>
-        <button type="submit" className="btn-primary">
-          Submit
+      <Field className="flex justify-between items-center text-white">
+        <button
+          type="button"
+          onClick={clearFilters}
+          className="uppercase hover:underline"
+        >
+          Limpar Filtros
         </button>
-        <button type="button" className="btn-secondary" onClick={clearFilters}>
-          Clear Filters
+        <button
+          type="submit"
+          className="bg-teal-600 p-md rounded-md uppercase hover:underline"
+        >
+          Filtrar
         </button>
       </Field>
     </Fieldset>

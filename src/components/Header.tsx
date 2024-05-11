@@ -14,7 +14,7 @@ export default function Header() {
           </div>
           <PiInfo className="text-4xl" color="white" />
         </div>
-        <div className="bg-white flex gap-md rounded-md p-md items-center">
+        <form className="bg-white flex gap-md rounded-md p-md items-center">
           <input
             type="text"
             className="w-full"
@@ -23,7 +23,7 @@ export default function Header() {
           <button type="submit" aria-label="Buscar">
             <PiMagnifyingGlassBold className="text-2xl text-stone-700" />
           </button>
-        </div>
+        </form>
       </div>
       <FilterDropdown />
     </header>

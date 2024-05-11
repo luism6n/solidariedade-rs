@@ -37,10 +37,12 @@ export default function Home() {
     <body>
       <Header />
       <div className="MAP h-72 w-full bg-yellow-400">MAPA</div>
-      <div className="bg-green-400 p-lg font-semibold text-white">
+      <div className="bg-teal-600 p-lg font-semibold text-white hover:underline">
         Ver lista
       </div>
-      <div className="bg-green-400 p-lg font-semibold text-white">Ver mapa</div>
+      <div className="bg-teal-600 p-lg font-semibold text-white hover:underline">
+        Ver mapa
+      </div>
 
       <main className="p-lg">
         <div className="grid grid-cols-1 gap-lg">
