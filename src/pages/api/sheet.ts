@@ -81,6 +81,15 @@ export default async function handler(
       }
     }
 
+    // remove empty rows (rows with all null content or just the ID column)
+    if (
+      cells.every(
+        (cell, i) => cell.content === null || data.cols[i].name === "ID"
+      )
+    ) {
+      continue;
+    }
+
     data.rows.push({ cells });
   }
 
