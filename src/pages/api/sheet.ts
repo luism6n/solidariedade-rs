@@ -4,6 +4,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = Sheet;
 
+const knownTags = ["ignore", "updated", "list"];
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -42,26 +44,45 @@ export default async function handler(
     return;
   }
 
-  // convert GoogleSheet to common type Sheet
   const data: Sheet = {
-    cols: googleSheetData.table.cols.map((col) => ({
-      // extract tags from col.label ([x] [y] [z] name => [x, y, z] name)
-      tags:
-        col.label.match(/\[.*?\]/g)?.map((tag) => tag.replace(/[\[\]]/g, "")) ||
-        [],
-
-      // remove tags from name
-      name: col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>",
-    })),
-    rows: googleSheetData.table.rows.map((row) => ({
-      cells: row.c.map((cell) => cell?.v),
-    })),
+    cols: [],
+    rows: [],
   };
 
-  // remove rows that have only ID
-  data.rows = data.rows.filter((row) =>
-    row.cells.some((cell, i) => cell && data.cols[i].name !== "ID")
-  );
+  for (const col of googleSheetData.table.cols) {
+    // find tags, remove brackets []
+    let tags = col.label
+      .match(/\[.*?\]/g)
+      ?.map((tag) => tag.replace(/[\[\]]/g, ""));
+
+    if (!tags) {
+      tags = [];
+    }
+
+    // replace unknown tags with "ignore"
+    for (let i = 0; i < tags.length; i++) {
+      if (!knownTags.includes(tags[i])) {
+        tags[i] = "ignore";
+      }
+    }
+
+    const name = col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>";
+    data.cols.push({ tags, name });
+  }
+
+  for (const row of googleSheetData.table.rows) {
+    const cells: (string | null)[] = [];
+
+    for (const cell of row.c) {
+      if (!cell?.v) {
+        cells.push(null);
+      } else {
+        cells.push(cell.v);
+      }
+    }
+
+    data.rows.push({ cells });
+  }
 
   res.send(data);
 }
