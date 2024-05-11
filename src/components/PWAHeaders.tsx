@@ -2,10 +2,16 @@ export const PWAHeaders = () => {
   // reference: https://www.npmjs.com/package/next-pwa
   return (
     <>
-      <meta name="application-name" content="Social List" />
+      <meta
+        name="application-name"
+        content="Campanha Popular de Solidariedade RS"
+      />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      <meta name="apple-mobile-web-app-title" content="Social List" />
+      <meta
+        name="apple-mobile-web-app-title"
+        content="Campanha Popular de Solidariedade RS"
+      />
       <meta name="format-detection" content="telephone=no" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="msapplication-TileColor" content="#2B5797" />
@@ -18,12 +24,18 @@ export const PWAHeaders = () => {
       <link rel="manifest" href="/manifest.json" />
       <link rel="shortcut icon" href="/favicon.ico" />
 
-      <meta name="twitter:card" content="An app for building lists socially" />
+      <meta
+        name="twitter:card"
+        content="App de informações para coordenação voluntária"
+      />
       <meta name="twitter:url" content="https://social-list.up.railway.app" />
-      <meta name="twitter:title" content="Social List" />
+      <meta
+        name="twitter:title"
+        content="Campanha Popular de Solidariedade RS"
+      />
       <meta
         name="twitter:description"
-        content="An app for building lists socially"
+        content="App de informações para coordenação voluntária"
       />
       <meta
         name="twitter:image"
@@ -31,12 +43,18 @@ export const PWAHeaders = () => {
       />
       <meta name="twitter:creator" content="@luism6n" />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content="Social List" />
+      <meta
+        property="og:title"
+        content="Campanha Popular de Solidariedade RS"
+      />
       <meta
         property="og:description"
-        content="An app for building lists socially"
+        content="App de informações para coordenação voluntária"
       />
-      <meta property="og:site_name" content="Social List" />
+      <meta
+        property="og:site_name"
+        content="Campanha Popular de Solidariedade RS"
+      />
       <meta property="og:url" content="https://yourdomain.com" />
       <meta
         property="og:image"
