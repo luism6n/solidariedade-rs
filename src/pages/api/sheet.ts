@@ -20,6 +20,7 @@ export default async function handler(
     return;
   }
 
+  let googleSheetData: GoogleSheet;
   let jsonString: string;
   try {
     const regexGroups = /google.visualization.Query.setResponse\((.*)\);/.exec(
@@ -33,14 +34,15 @@ export default async function handler(
     } else {
       jsonString = regexGroups[1];
     }
+
+    googleSheetData = JSON.parse(jsonString) as GoogleSheet;
   } catch (error) {
     console.error("error extracting JSON from response:", error);
     res.status(500);
     return;
   }
 
-  const googleSheetData = JSON.parse(jsonString) as GoogleSheet;
-  console.log(googleSheetData.table);
+  // convert GoogleSheet to common type Sheet
   const data: Sheet = {
     cols: googleSheetData.table.cols.map((col) => ({
       // extract tags from col.label ([x] [y] [z] name => [x, y, z] name)
@@ -53,6 +55,11 @@ export default async function handler(
       cells: row.c.map((cell) => cell?.v),
     })),
   };
+
+  // remove rows that have only ID
+  data.rows = data.rows.filter((row) =>
+    row.cells.some((cell, i) => cell && data.cols[i].name !== "[ignore] ID")
+  );
 
   res.send(data);
 }
