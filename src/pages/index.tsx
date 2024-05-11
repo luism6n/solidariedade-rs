@@ -1,7 +1,7 @@
 "use client";
 
 import Card from "@/components/Card";
-import Header from "@/components/Header";
+import Header, { type NetworkState } from "@/components/Header";
 import { Sheet } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -9,6 +9,10 @@ export default function Home() {
   const [data, setData] = useState<Sheet | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<Sheet | null>(null);
+  const [networkState, setNetworkState] = useState<NetworkState>({
+    online: true,
+    lastFetchTime: null,
+  });
 
   const handleSearchResults = (filteredData: Sheet) => {
     setSearchResults(filteredData);
@@ -16,18 +20,53 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
+      let res: Awaited<ReturnType<typeof fetch>>;
+
+      const fetchTime = new Date();
       try {
-        const res = await fetch("/api/sheet");
-
-        if (!res.ok) {
-          throw new Error(`${res.status} ${res.statusText}`);
-        }
-
-        const sheetData = await res.json();
-        setData(sheetData);
-      } catch (error: React.ErrorInfo | any) {
-        setError(error.message);
+        res = await fetch("/api/sheet");
+      } catch (error: unknown) {
+        setNetworkState((ns) => ({
+          ...ns,
+          online: false,
+        }));
+        return;
       }
+
+      if (!res.ok) {
+        console.error(
+          `failed to fetch sheet ${res.status} ${res.statusText}:`,
+          res
+        );
+        setError(`${res.status} ${res.statusText}`);
+        return;
+      }
+
+      // if the Date header is older than the fetch time, we're offline and the
+      // service worker is serving a cached response
+      const responseTime = new Date(res.headers.get("Date") || "");
+      if (responseTime < fetchTime) {
+        setNetworkState({
+          online: false,
+          lastFetchTime: responseTime,
+        });
+      } else {
+        setNetworkState({
+          online: true,
+          lastFetchTime: responseTime,
+        });
+      }
+
+      let sheetData: Sheet;
+      try {
+        sheetData = await res.json();
+      } catch (error: unknown) {
+        console.error("error extracting JSON from response:", error);
+        setError("Erro interno");
+        return;
+      }
+
+      setData(sheetData);
     };
 
     fetchData();
@@ -38,14 +77,22 @@ export default function Home() {
   }
 
   if (!data) {
-    return <p>Carregando...</p>;
+    if (networkState.online) {
+      return <p>Carregando...</p>;
+    } else {
+      return <p>Você está offline e sem dados anteriores.</p>;
+    }
   }
 
   const { cols, rows } = searchResults || data;
 
   return (
     <>
-      <Header data={data} setSearchResults={handleSearchResults} />
+      <Header
+        data={data}
+        setSearchResults={handleSearchResults}
+        networkState={networkState}
+      />
       {/* <div className="MAP h-72 w-full bg-yellow-400">MAPA</div>
       <div className="bg-teal-600 p-lg font-semibold text-white hover:underline">
         Ver lista

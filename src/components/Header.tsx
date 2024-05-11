@@ -11,12 +11,23 @@ function normalizeCellForComparison(content: Cell["content"]) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
 }
+
+export interface NetworkState {
+  online: boolean;
+  lastFetchTime: Date | null;
+}
+
 interface HeaderProps {
   data: Sheet;
   setSearchResults: (filteredData: Sheet) => void;
+  networkState: NetworkState;
 }
 
-export default function Header({ data, setSearchResults }: HeaderProps) {
+export default function Header({
+  data,
+  setSearchResults,
+  networkState,
+}: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (value: string) => {
@@ -61,6 +72,15 @@ export default function Header({ data, setSearchResults }: HeaderProps) {
           </button>
         </form>
       </div>
+
+      {!networkState.online && networkState.lastFetchTime && (
+        <div className="p-sm bg-stone-200">
+          <p className="text-sm text-rose-500">
+            Você está offline. Último dado carregado em{" "}
+            {networkState.lastFetchTime.toLocaleTimeString()}
+          </p>
+        </div>
+      )}
     </header>
   );
 }
