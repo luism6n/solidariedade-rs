@@ -49,7 +49,9 @@ export default async function handler(
       tags:
         col.label.match(/\[.*?\]/g)?.map((tag) => tag.replace(/[\[\]]/g, "")) ||
         [],
-      name: col.label,
+
+      // remove tags from name
+      name: col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>",
     })),
     rows: googleSheetData.table.rows.map((row) => ({
       cells: row.c.map((cell) => cell?.v),
@@ -58,7 +60,7 @@ export default async function handler(
 
   // remove rows that have only ID
   data.rows = data.rows.filter((row) =>
-    row.cells.some((cell, i) => cell && data.cols[i].name !== "[ignore] ID")
+    row.cells.some((cell, i) => cell && data.cols[i].name !== "ID")
   );
 
   res.send(data);
