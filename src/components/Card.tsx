@@ -15,24 +15,35 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         if (col.tags.includes("ignore")) {
           return null;
         }
-        // if (col.tags.includes("list")) {
-        //   return (
-        //     <div
-        //       key={i}
-        //       className="font-semibold rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
-        //     >
-        //       <p className="font-semibold">{label}</p>
-        //       <ul className="list-disc list-inside">
-        //         {content
-        //           .toString()
-        //           .split(";")
-        //           .map((item, i) => (
-        //             <li key={i}>{item}</li>
-        //           ))}
-        //       </ul>
-        //     </div>
-        //   );
-        // }
+
+        if (col.tags.includes("updated")) {
+          return (
+            <div
+              key={i}
+              className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md"
+            >
+              <p className="text-stone-700">{label}: </p>
+              <p>{new Date(content).toLocaleDateString()}</p>
+            </div>
+          );
+        } else if (col.tags.includes("list")) {
+          return (
+            <div
+              key={i}
+              className="font-semibold rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
+            >
+              <p className="font-semibold text-stone-700">{label}</p>
+              <ul className="list-disc list-inside">
+                {content
+                  .toString()
+                  .split(";")
+                  .map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+              </ul>
+            </div>
+          );
+        }
 
         if (label === "Nome") {
           return (
@@ -58,6 +69,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
               key={i}
               className="font-semibold rounded-md border border-stone-200 bg-white p-md flex gap-md"
             >
+              {/* {col.tags} */}
               <p className="text-stone-700">{label}: </p>
               <p>{content}</p>
             </div>
