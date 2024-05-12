@@ -81,7 +81,10 @@ export default function FilterDropdown() {
   return (
     <div className="flex w-full justify-center bg-stone-700 text-white p-md">
       <Menu>
-        <MenuButton onClick={() => setMenuOpen(!menuOpen)}>
+        <MenuButton
+          className="w-full flex justify-center items-center"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
           <div className="flex gap-md items-center">
             <p>Filtros de busca</p>
             <PiCaretDownFill

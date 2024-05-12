@@ -72,6 +72,7 @@ export default function Header({
           </button>
         </form>
       </div>
+      {/* <FilterDropdown /> */}
 
       {!networkState.online && networkState.lastFetchTime && (
         <div className="p-sm bg-stone-200">
