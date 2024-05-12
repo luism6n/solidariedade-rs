@@ -49,36 +49,94 @@ export default async function handler(
     rows: [],
   };
 
-  for (const col of googleSheetData.table.cols) {
-    // find tags, remove brackets []
-    let tags = col.label
-      .match(/\[.*?\]/g)
-      ?.map((tag) => tag.replace(/[\[\]]/g, ""));
+  // Map column name -> column index where the updated date is
+  const timeStampIndices = new Map<string, number>();
 
-    if (!tags) {
-      tags = [];
+  for (let c = 0; c < googleSheetData.table.cols.length; c++) {
+    const col = googleSheetData.table.cols[c];
+
+    const name = col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>";
+
+    let tags: string[] = [];
+    // find tags, remove brackets []
+    let match = col.label.match(/\[.*?\]/g);
+
+    if (match) {
+      tags = match.map((tag) => tag.replace(/[\[\]]/g, ""));
     }
 
     // replace unknown tags with "ignore"
-    for (let i = 0; i < tags.length; i++) {
-      if (!knownTags.includes(tags[i])) {
-        tags[i] = "ignore";
+    for (let t = 0; t < tags.length; t++) {
+      if (!knownTags.includes(tags[t])) {
+        tags[t] = "ignore";
+      }
+
+      if (tags[t] === "updated") {
+        timeStampIndices.set(name, c);
       }
     }
 
-    const name = col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>";
     data.cols.push({ tags, name });
   }
 
-  for (const row of googleSheetData.table.rows) {
-    const cells: Cell[] = [];
+  console.log("timeStampIndices", timeStampIndices);
 
-    for (const cell of row.c) {
-      if (!cell?.v) {
-        cells.push({ content: null, updatedAt: undefined });
-      } else {
-        cells.push({ content: cell.v, updatedAt: undefined });
+  for (let r = 0; r < googleSheetData.table.rows.length; r++) {
+    const row = googleSheetData.table.rows[r];
+    const cells: Cell[] = [];
+    console.log("row", row);
+
+    for (let c = 0; c < row.c.length; c++) {
+      const googleSheetCell = row.c[c];
+      const cell: Cell = { content: null, updatedAt: undefined };
+
+      googleSheetCell?.v;
+
+      if (googleSheetCell === null) {
+        // empty cell
+        cells.push(cell);
+        continue;
+      } else if (typeof googleSheetCell === "undefined") {
+        console.warn(
+          `unexpected undefined type ${typeof googleSheetCell} in cell ${r},${c} with value ${googleSheetCell}`
+        );
+        cells.push(cell);
+        continue;
       }
+
+      if (
+        typeof googleSheetCell.v === "string" ||
+        typeof googleSheetCell.v === "number"
+      ) {
+        cell.content = googleSheetCell.v;
+      } else if (typeof googleSheetCell.v === "undefined") {
+        cell.content = null;
+      } else {
+        console.warn(
+          `unexpected cell value type ${typeof googleSheetCell.v} in cell ${r},${c} with value ${
+            googleSheetCell.v
+          }`
+        );
+      }
+
+      if (timeStampIndices.has(data.cols[c].name)) {
+        const timestampIndex = timeStampIndices.get(data.cols[c].name);
+
+        if (!timestampIndex) {
+          throw new Error("impossible to reach this, but typescript complains");
+        }
+
+        const updatedAt = formatDate(row.c[timestampIndex]?.v);
+        if (updatedAt) {
+          cell.updatedAt = updatedAt.toISOString();
+        } else {
+          console.warn(
+            `unexpected updatedAt type ${typeof updatedAt} in cell ${r},${c} with value ${updatedAt}`
+          );
+        }
+      }
+
+      cells.push(cell);
     }
 
     // remove empty rows (rows with all null content or just the ID column)
@@ -87,6 +145,7 @@ export default async function handler(
         (cell, i) => cell.content === null || data.cols[i].name === "ID"
       )
     ) {
+      console.warn(`ignoring empty row ${r}`);
       continue;
     }
 
@@ -94,4 +153,32 @@ export default async function handler(
   }
 
   res.send(data);
+}
+
+function formatDate(date: unknown): Date | null {
+  if (typeof date !== "string") {
+    return null;
+  }
+
+  // Extract only what's inside the parenthesis
+  const extractedContents = date.match(/\(([^)]+)\)/)?.[1];
+
+  if (!extractedContents) {
+    return null;
+  }
+
+  // Split the contents by commas to get individual values
+  const [year, month, day, hour, minute, second] = extractedContents.split(",");
+
+  // Create a new Date object using the extracted values
+  const formattedDate = new Date(
+    parseInt(year),
+    parseInt(month) - 1, // Month is zero-based in JavaScript Date object
+    parseInt(day),
+    parseInt(hour),
+    parseInt(minute),
+    parseInt(second)
+  );
+
+  return formattedDate;
 }

@@ -1,30 +1,6 @@
 import { Col, Row } from "@/types";
 import Link from "next/link";
 
-function formatDate(dateStr: string): Date {
-  // Extract only what's inside the parenthesis
-  const extractedContents = dateStr.match(/\(([^)]+)\)/)?.[1];
-
-  if (!extractedContents) {
-    throw new Error("Invalid date string format.");
-  }
-
-  // Split the contents by commas to get individual values
-  const [year, month, day, hour, minute, second] = extractedContents.split(",");
-
-  // Create a new Date object using the extracted values
-  const formattedDate = new Date(
-    parseInt(year),
-    parseInt(month) - 1, // Month is zero-based in JavaScript Date object
-    parseInt(day),
-    parseInt(hour),
-    parseInt(minute),
-    parseInt(second)
-  );
-
-  return formattedDate;
-}
-
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
     <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
@@ -32,24 +8,13 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         const cell = row.cells[i];
 
         const label = col.name;
-        const content = cell.content;
+        const { content, updatedAt } = cell;
         if (!content) return null;
-        const updatedAt = cell.updatedAt;
 
         if (col.tags.includes("ignore")) {
           return null;
-        }
-
-        if (col.tags.includes("updated") && typeof content === "string") {
-          return (
-            <div
-              key={i}
-              className="rounded-md border border-stone-200 bg-white p-md flex gap-md"
-            >
-              <p className="font-semibold text-stone-700">{label}: </p>
-              <p>Updated at: {formatDate(content).toLocaleString()}</p>
-            </div>
-          );
+        } else if (col.tags.includes("updated")) {
+          return null;
         } else if (col.tags.includes("list")) {
           return (
             <div
@@ -91,17 +56,17 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={i}
-              className="rounded-md border border-stone-200 bg-white p-md flex gap-md"
+              className="rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
             >
-              {/* {col.tags} */}
-              <p className="font-semibold text-stone-700">{label}: </p>
-              <p>{content}</p>
-              {/* {updatedAt && (
-                <p className="text-stone-500">
-                  (última atualização:{" "}
-                  {new Date(updatedAt).toLocaleDateString()})
+              <div className="flex gap-md">
+                <p className="font-semibold text-stone-700">{label}: </p>
+                <p>{content}</p>
+              </div>
+              {updatedAt && (
+                <p className="text-stone-700 text-sm">
+                  Atualizado em {new Date(updatedAt).toLocaleString()}
                 </p>
-              )} */}
+              )}
             </div>
           );
         }

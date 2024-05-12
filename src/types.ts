@@ -15,10 +15,10 @@ export interface Row {
 }
 
 // TODO: content should also accept string[] and list should be removed
-// TODO: updatedAt should be a Date object
+// TODO: updatedAt should be an ISO date string
 export type Cell = {
   content: string | number | null;
-  updatedAt?: Date;
+  updatedAt?: string;
 };
 
 // Google Sheet API response types
@@ -48,6 +48,6 @@ export interface GoogleSheetRow {
 }
 
 export interface GoogleSheetRowCell {
-  v: any;
+  v: unknown;
   f?: string;
 }
