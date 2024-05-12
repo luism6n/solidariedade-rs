@@ -2,12 +2,15 @@ import { Cell, Col, Row } from "@/types";
 import Link from "next/link";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
-  
+
+  let bairro_index = 0;
   let municipio_index = 0;
-  for(var i=0; i < cols.length; i++){
-    if(cols[i].name == "Município"){
+  for (let i = 0; i < cols.length; i++) {
+    if (cols[i].name === "Bairro") {
+      bairro_index = i;
+    }
+    if (cols[i].name === "Município") {
       municipio_index = i;
-      break;
     }
   }
 
@@ -16,7 +19,6 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
       {cols.map((col, i) => {
         const cell = row.cells[i];
         const label = col.name;
-        const municipio = row.cells[municipio_index];
 
         if (col.tags.includes("ignore")) {
           return null;
@@ -31,10 +33,13 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
             </p>
           );
         } else if (label === "Endereço") {
+          const endereco = row.cells[i];
+          const bairro = row.cells[bairro_index] ? "," + row.cells[bairro_index] : "";
+          const municipio = "," + row.cells[municipio_index];
           return (
             <p className="font-semibold underline text-stone-700" key={i}>
               <Link
-                href={`https://www.google.com/maps/search/?api=1&query=${cell}+${municipio}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${endereco}${bairro}${municipio},RS`}
                 target="_blank"
                 rel="noreferrer"
               >
