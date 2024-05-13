@@ -10,7 +10,7 @@ type Data = Sheet;
 // accessing the sheet from a browser
 const sheetGid = process.env.NODE_ENV === "development" ? "1025587008" : "0";
 
-const knownTags = ["escondido", "atualizavel", "lista"];
+const knownTags = ["escondido", "atualizavel", "lista", "google-maps"];
 
 export default async function handler(
   req: NextApiRequest,
@@ -131,6 +131,10 @@ export default async function handler(
         console.warn(
           `unexpected cell value type ${typeof content} in cell ${r},${c} with value ${content}`
         );
+      }
+
+      if (tagsInColumn[c].includes("google-maps")) {
+        cell.googleMaps = true;
       }
 
       if (timeStampIndices.has(data.cols[c].name)) {

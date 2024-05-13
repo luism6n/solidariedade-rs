@@ -17,6 +17,8 @@ export interface Row {
 export type Cell = {
   content: string[] | string | number | null;
   updatedAt?: string;
+  // true when content should become a query in a Google maps link
+  googleMaps?: boolean;
 };
 
 // Google Sheet API response types

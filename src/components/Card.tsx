@@ -5,7 +5,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
     <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
       {cols.map((col, i) => {
-        const { content, updatedAt } = row.cells[i];
+        const { content, updatedAt, googleMaps } = row.cells[i];
         const label = col.name;
 
         if (!content) return null;
@@ -32,7 +32,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
               {content}
             </p>
           );
-        } else if (label === "Endereço") {
+        } else if (googleMaps) {
           return (
             <p className="font-semibold underline text-stone-700" key={i}>
               <Link
