@@ -1,9 +1,17 @@
+export enum Tag {
+  IGNORE = "ignore",
+  UPDATED = "updated",
+  LIST = "list",
+  ADDRESS = "address",
+}
+
 export interface Sheet {
   cols: Col[];
   rows: Row[];
 }
 
 export interface Col {
+  // group?: string;
   name: string;
   hidden?: boolean;
 }

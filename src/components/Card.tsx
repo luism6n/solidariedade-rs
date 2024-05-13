@@ -1,5 +1,6 @@
 import { Col, Row } from "@/types";
 import Link from "next/link";
+import { PiMapPinBold } from "react-icons/pi";
 import Pill from "./Pill";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
@@ -35,7 +36,11 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           );
         } else if (googleMaps) {
           return (
-            <p className="font-semibold underline text-stone-700" key={i}>
+            <div
+              className="flex gap-sm items-center font-semibold underline text-stone-700"
+              key={i}
+            >
+              <PiMapPinBold className="text-xl flex-shrink-0" />
               <Link
                 href={`https://www.google.com/maps/search/?api=1&query=${content}`}
                 target="_blank"
@@ -43,7 +48,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
               >
                 {content}
               </Link>
-            </p>
+            </div>
           );
         } else {
           return (
