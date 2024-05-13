@@ -7,7 +7,7 @@ import { PWAHeaders } from "../components/PWAHeaders";
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({ subsets: ["latin"] });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {  
   return (
     <>
       <Head>
@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
-        <title>Solidariedade Rio Grande do Sul</title>
+        <title>{process.env.NEXT_PUBLIC_SITE_NAME}</title>
         <PWAHeaders />
       </Head>
       <main className={inter.className}>
