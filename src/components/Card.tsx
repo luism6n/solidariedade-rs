@@ -1,5 +1,6 @@
 import { Col, Row } from "@/types";
 import Link from "next/link";
+import Pill from "./Pill";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
@@ -19,11 +20,11 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
               className="rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
             >
               <p className="font-semibold text-stone-700">{label}</p>
-              <ul className="list-disc list-inside">
+              <div className="flex flex-wrap gap-xs">
                 {content.map((item, i) => (
-                  <li key={i}>{item}</li>
+                  <Pill key={i}>{item}</Pill>
                 ))}
-              </ul>
+              </div>
             </div>
           );
         } else if (label === "Nome") {
