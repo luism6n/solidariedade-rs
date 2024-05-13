@@ -3,11 +3,9 @@ export interface Sheet {
   rows: Row[];
 }
 
-// TODO: tags should become properties. E.g., [ignore] X -> { hidden: true }
 export interface Col {
-  tags: string[];
-  // group?: string;
   name: string;
+  hidden?: boolean;
 }
 
 export interface Row {
@@ -17,7 +15,7 @@ export interface Row {
 // TODO: content should also accept string[] and list should be removed
 // TODO: updatedAt should be an ISO date string
 export type Cell = {
-  content: string | number | null;
+  content: string[] | string | number | null;
   updatedAt?: string;
 };
 
