@@ -1,10 +1,16 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { Cell, GoogleSheet, Sheet } from "@/types";
+import { Cell, Sheet } from "@/types";
+import { parse } from "csv-parse/sync";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 type Data = Sheet;
 
-const knownTags = ["ignore", "updated", "list"];
+// gid can be obtained checking the gid query param in the address bar when
+// accessing the sheet from a browser
+const sheetGid = process.env.NODE_ENV === "development" ? "1025587008" : "0";
+
+const knownTags = ["escondido", "atualizavel", "lista"];
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,33 +19,34 @@ export default async function handler(
   console.log("new request");
 
   const sheetResponse = await fetch(
-    "https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/gviz/tq?tqx=out:json&range=PLANILHA!A2:ZZ"
+    `https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/export?format=csv&gid=${sheetGid}`,
+    { redirect: "follow" }
   );
 
-  if (sheetResponse.status !== 200) {
+  if (sheetResponse.status !== 200 || !sheetResponse.body) {
     console.error(`failed to fetch sheet ${sheetResponse.body}`);
     res.status(502);
     return;
   }
 
-  let googleSheetData: GoogleSheet;
-  let jsonString: string;
+  let csv: unknown;
+  const body = await sheetResponse.text();
   try {
-    const regexGroups = /google.visualization.Query.setResponse\((.*)\);/.exec(
-      await sheetResponse.text()
-    );
+    csv = parse(body);
+  } catch {
+    console.error(`failed to parse sheet response: ${body}`);
+    res.status(500);
+    return;
+  }
 
-    if (!regexGroups?.length || regexGroups.length < 2) {
-      console.error(`failed to fetch sheet ${regexGroups}`);
-      res.status(500);
-      return;
-    } else {
-      jsonString = regexGroups[1];
-    }
+  // use zod to check it's at least a 3 rows and 1 column
+  const googleSheetSchema = z.array(z.array(z.string()).min(1)).min(3);
 
-    googleSheetData = JSON.parse(jsonString) as GoogleSheet;
-  } catch (error) {
-    console.error("error extracting JSON from response:", error);
+  let googleSheetData;
+  try {
+    googleSheetData = googleSheetSchema.parse(csv);
+  } catch (e) {
+    console.error(`sheet response not in expected format: ${e}`);
     res.status(500);
     return;
   }
@@ -49,73 +56,80 @@ export default async function handler(
     rows: [],
   };
 
+  for (let c = 0; c < googleSheetData[1].length; c++) {
+    const name = googleSheetData[1][c] || `col${c}`;
+
+    data.cols.push({ name });
+  }
+
   // Map column name -> column index where the updated date is
   const timeStampIndices = new Map<string, number>();
 
-  for (let c = 0; c < googleSheetData.table.cols.length; c++) {
-    const col = googleSheetData.table.cols[c];
+  // second row is tags, separated by ;
+  const tagRow = googleSheetData[2];
+  console.log("tagRow", tagRow);
+  console.log("tagRowAlt", googleSheetData[1]);
+  const tagsInColumn: string[][] = [];
+  for (let c = 0; c < data.cols.length; c++) {
+    const col = data.cols[c];
+    tagsInColumn[c] = [];
 
-    const name = col.label.replace(/\[.*?\]/g, "").trim() || "<unnamed column>";
-
-    let tags: string[] = [];
-    // find tags, remove brackets []
-    let match = col.label.match(/\[.*?\]/g);
-
-    if (match) {
-      tags = match.map((tag) => tag.replace(/[\[\]]/g, ""));
+    const tagsString = tagRow[c];
+    if (typeof tagsString !== "string") {
+      console.warn(
+        `unexpected data type in tag column: ${typeof tagsString} in column ${
+          col.name
+        }`
+      );
+      continue;
     }
 
-    // replace unknown tags with "ignore"
-    for (let t = 0; t < tags.length; t++) {
-      if (!knownTags.includes(tags[t])) {
-        tags[t] = "ignore";
-      }
+    const tagList = tagsString.split(";").map((tag) => tag.trim());
 
-      if (tags[t] === "updated") {
-        timeStampIndices.set(name, c);
+    for (const tag of tagList) {
+      if (knownTags.includes(tag)) {
+        if (tag === "escondido") {
+          col.hidden = true;
+        } else if (tag === "atualizavel") {
+          col.hidden = true;
+          timeStampIndices.set(col.name, c);
+        }
+
+        tagsInColumn[c].push(tag);
+      } else {
+        console.warn(`unknown tag ${tag} in column ${col.name}`);
       }
     }
-
-    data.cols.push({ tags, name });
   }
 
-  console.log("timeStampIndices", timeStampIndices);
-
-  for (let r = 0; r < googleSheetData.table.rows.length; r++) {
-    const row = googleSheetData.table.rows[r];
+  for (let r = 3; r < googleSheetData.length; r++) {
+    const row = googleSheetData[r];
     const cells: Cell[] = [];
-    console.log("row", row);
 
-    for (let c = 0; c < row.c.length; c++) {
-      const googleSheetCell = row.c[c];
+    for (let c = 0; c < row.length; c++) {
+      const content = row[c];
+
       const cell: Cell = { content: null, updatedAt: undefined };
 
-      googleSheetCell?.v;
-
-      if (googleSheetCell === null) {
-        // empty cell
-        cells.push(cell);
-        continue;
-      } else if (typeof googleSheetCell === "undefined") {
+      if (typeof content === "undefined") {
         console.warn(
-          `unexpected undefined type ${typeof googleSheetCell} in cell ${r},${c} with value ${googleSheetCell}`
+          `unexpected undefined type ${typeof content} in cell ${r},${c} with value ${content}`
         );
         cells.push(cell);
         continue;
       }
 
-      if (
-        typeof googleSheetCell.v === "string" ||
-        typeof googleSheetCell.v === "number"
-      ) {
-        cell.content = googleSheetCell.v;
-      } else if (typeof googleSheetCell.v === "undefined") {
+      if (content === "") {
         cell.content = null;
+      } else if (tagsInColumn[c].includes("lista")) {
+        cell.content = content.split(";");
+      } else if (typeof content === "string" && stringHasContent(content)) {
+        cell.content = content;
+      } else if (typeof content === "number") {
+        cell.content = content;
       } else {
         console.warn(
-          `unexpected cell value type ${typeof googleSheetCell.v} in cell ${r},${c} with value ${
-            googleSheetCell.v
-          }`
+          `unexpected cell value type ${typeof content} in cell ${r},${c} with value ${content}`
         );
       }
 
@@ -126,7 +140,7 @@ export default async function handler(
           throw new Error("impossible to reach this, but typescript complains");
         }
 
-        const updatedAt = formatDate(row.c[timestampIndex]?.v);
+        const updatedAt = formatDate(row[timestampIndex]);
         if (updatedAt) {
           cell.updatedAt = updatedAt.toISOString();
         } else {
@@ -145,7 +159,6 @@ export default async function handler(
         (cell, i) => cell.content === null || data.cols[i].name === "ID"
       )
     ) {
-      console.warn(`ignoring empty row ${r}`);
       continue;
     }
 
@@ -181,4 +194,15 @@ function formatDate(date: unknown): Date | null {
   );
 
   return formattedDate;
+}
+
+function stringHasContent(str: string): boolean {
+  const chars = new Set(str.trim());
+
+  // since we use formular, they can leave leftovers, so if the string has only
+  // spaces and commas, it's considered empty
+  chars.delete(" ");
+  chars.delete(",");
+
+  return chars.size > 0;
 }

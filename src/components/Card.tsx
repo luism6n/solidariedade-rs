@@ -5,17 +5,14 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
     <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
       {cols.map((col, i) => {
-        const cell = row.cells[i];
-
+        const { content, updatedAt } = row.cells[i];
         const label = col.name;
-        const { content, updatedAt } = cell;
+
         if (!content) return null;
 
-        if (col.tags.includes("ignore")) {
+        if (col.hidden) {
           return null;
-        } else if (col.tags.includes("updated")) {
-          return null;
-        } else if (col.tags.includes("list")) {
+        } else if (Array.isArray(content)) {
           return (
             <div
               key={i}
@@ -23,18 +20,13 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
             >
               <p className="font-semibold text-stone-700">{label}</p>
               <ul className="list-disc list-inside">
-                {content
-                  .toString()
-                  .split(";")
-                  .map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
+                {content.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
               </ul>
             </div>
           );
-        }
-
-        if (label === "Nome") {
+        } else if (label === "Nome") {
           return (
             <p className="font-bold text-lg" key={i}>
               {content}
@@ -44,7 +36,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <p className="font-semibold underline text-stone-700" key={i}>
               <Link
-                href={`https://www.google.com/maps/search/?api=1&query=${cell}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${content}`}
                 target="_blank"
                 rel="noreferrer"
               >
