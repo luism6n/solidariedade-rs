@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
-        <title>Solidariedade Rio Grande do Sul</title>
+        <title>{process.env.NEXT_PUBLIC_SITE_NAME}</title>
         <PWAHeaders />
       </Head>
       <main className={inter.className}>
