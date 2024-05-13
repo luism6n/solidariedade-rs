@@ -3,11 +3,15 @@ import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { PWAHeaders } from "../components/PWAHeaders";
+import ReactGA from "react-ga4";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({ subsets: ["latin"] });
+const GA_METRIC_ID: string = (process.env.NEXT_PUBLIC_GA_METRIC_ID as string);
+
 
 export default function App({ Component, pageProps }: AppProps) {
+  ReactGA.initialize(GA_METRIC_ID);
   return (
     <>
       <Head>
