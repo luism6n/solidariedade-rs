@@ -2,6 +2,7 @@ import { Cell, Sheet } from "@/types";
 import { useState } from "react";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 import TitleLogo from "./TitleLogo";
+import FilterDropdown from "./FilterDropdown";
 
 function normalizeCellForComparison(content: Cell["content"]) {
   if (content === null) return "";
@@ -72,7 +73,8 @@ export default function Header({
           </button>
         </form>
       </div>
-      {/* <FilterDropdown /> */}
+
+      <FilterDropdown data={data} setSearchResults={setSearchResults} />
 
       {!networkState.online && networkState.lastFetchTime && (
         <div className="p-sm bg-stone-200">

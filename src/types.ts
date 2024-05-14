@@ -3,6 +3,7 @@ export enum Tag {
   ATUALIZAVEL = "atualizavel",
   LISTA = "lista",
   GOOGLE_MAPS = "google-maps",
+  FILTRO_ESCOLHA = "filtro-escolha",
 }
 
 export interface Sheet {
@@ -11,9 +12,12 @@ export interface Sheet {
 }
 
 export interface Col {
-  // group?: string;
+  // index is useful if we filter columns but want the original index
+  index: number;
   name: string;
   hidden?: boolean;
+  multiselect?: boolean;
+  choices?: string[];
 }
 
 export interface Row {
