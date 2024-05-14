@@ -87,7 +87,11 @@ async function parseCsvData(googleSheetData: string[][]) {
     const cells: Cell[] = [];
 
     // remove empty rows (rows with all null content or just the ID column)
-    if (row.every((cell, i) => cell === "" || data.cols[i].name === "ID")) {
+    if (
+      row.every(
+        (cell, i) => !stringHasContent(cell) || data.cols[i].name === "ID"
+      )
+    ) {
       numRowsSkipped++;
       continue;
     }
