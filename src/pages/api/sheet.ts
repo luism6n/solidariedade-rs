@@ -15,8 +15,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log("new request");
-
   let googleSheetData;
   try {
     googleSheetData = await getGoogleSheetData();
@@ -48,8 +46,6 @@ async function parseCsvData(googleSheetData: string[][]) {
 
   // second row is tags, separated by ;
   const tagRow = googleSheetData[2];
-  console.log("tagRow", tagRow);
-  console.log("tagRowAlt", googleSheetData[1]);
   const tagsInColumn: string[][] = [];
   for (let c = 0; c < data.cols.length; c++) {
     const col = data.cols[c];
@@ -68,18 +64,19 @@ async function parseCsvData(googleSheetData: string[][]) {
     const tagList = tagsString.split(";").map((tag) => tag.trim());
 
     for (const tag of tagList) {
-      if (tag !== "" && !Object.values(Tag).includes(tag as Tag)) {
-        if (tag === "escondido") {
+      if (tag === "") continue;
+
+      if (Object.values(Tag).includes(tag as Tag)) {
+        if (tag === Tag.ESCONDIDO) {
           col.hidden = true;
-        } else if (tag === "atualizavel") {
-          console.log("atualizavel", col.name, c);
+        } else if (tag === Tag.ATUALIZAVEL) {
           col.hidden = true;
           timeStampIndices.set(col.name, c);
         }
 
         tagsInColumn[c].push(tag);
       } else {
-        console.warn(`unknown tag ${tag} in column ${col.name}`);
+        console.warn(`unknown tag "${tag}" in column ${col.name}`);
       }
     }
   }
@@ -109,20 +106,21 @@ async function parseCsvData(googleSheetData: string[][]) {
       }
 
       if (content === "") {
-        cell.content = null;
-      } else if (tagsInColumn[c].includes("lista")) {
+        cells.push(cell);
+        continue;
+      }
+
+      if (tagsInColumn[c].includes(Tag.LISTA)) {
         cell.content = content.split(";");
       } else if (typeof content === "string" && stringHasContent(content)) {
         cell.content = content;
-      } else if (typeof content === "number") {
-        cell.content = content;
-      } else {
-        console.warn(
-          `unexpected cell value type ${typeof content} in cell ${r},${c} with value ${content}`
-        );
       }
 
-      if (tagsInColumn[c].includes("google-maps")) {
+      if (typeof content === "number") {
+        cell.content = content;
+      }
+
+      if (tagsInColumn[c].includes(Tag.GOOGLE_MAPS)) {
         cell.googleMaps = true;
       }
 
@@ -149,7 +147,7 @@ async function parseCsvData(googleSheetData: string[][]) {
     data.rows.push({ cells });
   }
 
-  console.log("skipped", numRowsSkipped, "empty rows");
+  console.info("skipped", numRowsSkipped, "empty rows");
 
   return data;
 }

@@ -1,8 +1,8 @@
 export enum Tag {
-  IGNORE = "ignore",
-  UPDATED = "updated",
-  LIST = "list",
-  ADDRESS = "address",
+  ESCONDIDO = "escondido",
+  ATUALIZAVEL = "atualizavel",
+  LISTA = "lista",
+  GOOGLE_MAPS = "google-maps",
 }
 
 export interface Sheet {
