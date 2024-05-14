@@ -11,27 +11,6 @@ type Data = Sheet;
 // accessing the sheet from a browser
 const sheetGid = process.env.NODE_ENV === "development" ? "1025587008" : "0";
 
-function extractTags(label: string): Tag[] {
-  let tags = [];
-  // find tags, remove brackets []
-  let match = label.match(/\[.*?\]/g);
-
-  if (!match) {
-    return [];
-  }
-
-  tags = match.map((tag) => tag.replace(/[\[\]]/g, ""));
-
-  // replace unknown tags with "ignore"
-  for (let t = 0; t < tags.length; t++) {
-    if (!Object.values(Tag).includes(tags[t] as Tag)) {
-      tags[t] = Tag.IGNORE;
-    }
-  }
-
-  return tags as Tag[];
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
