@@ -2,7 +2,7 @@ export const PWAHeaders = () => {
   // reference: https://www.npmjs.com/package/next-pwa
 
   const url = process.env.NEXT_PUBLIC_URL;
-  const icon = process.env.NEXT_PUBLIC_URL + "/icon.jpg";
+  const icon = process.env.NEXT_PUBLIC_URL + "/icon.png";
   const name = process.env.NEXT_PUBLIC_SITE_NAME;
   const description = process.env.NEXT_PUBLIC_SITE_DESC;
 
@@ -10,13 +10,13 @@ export const PWAHeaders = () => {
     <>
       <meta
         name="application-name"
-        content="Solidariedade RS"
+        content={name}
       />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       <meta
         name="apple-mobile-web-app-title"
-        content="Solidariedade RS"
+        content={name}
       />
       <meta name="format-detection" content="telephone=no" />
       <meta name="mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@ export const PWAHeaders = () => {
 
       <meta
         name="twitter:card"
-        content="Orientação de voluntários"
+        content={description}
       />
       <meta name="twitter:url" content={url} />
       <meta
@@ -41,7 +41,7 @@ export const PWAHeaders = () => {
       />
       <meta
         name="twitter:description"
-        content="Orientação de voluntários"
+        content={description}
       />
       <meta
         name="twitter:image"
