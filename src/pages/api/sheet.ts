@@ -38,7 +38,7 @@ async function parseCsvData(googleSheetData: string[][]) {
   for (let c = 0; c < googleSheetData[1].length; c++) {
     const name = googleSheetData[1][c] || `col${c}`;
 
-    data.cols.push({ name });
+    data.cols.push({ index: c, name });
   }
 
   // Map column name -> column index where the updated date is
@@ -69,9 +69,15 @@ async function parseCsvData(googleSheetData: string[][]) {
       if (Object.values(Tag).includes(tag as Tag)) {
         if (tag === Tag.ESCONDIDO) {
           col.hidden = true;
-        } else if (tag === Tag.ATUALIZAVEL) {
+        }
+
+        if (tag === Tag.ATUALIZAVEL) {
           col.hidden = true;
           timeStampIndices.set(col.name, c);
+        }
+
+        if (tag === Tag.FILTRO_ESCOLHA) {
+          col.choices = [];
         }
 
         tagsInColumn[c].push(tag);
@@ -126,6 +132,17 @@ async function parseCsvData(googleSheetData: string[][]) {
 
       if (tagsInColumn[c].includes(Tag.GOOGLE_MAPS)) {
         cell.googleMaps = true;
+      }
+
+      if (tagsInColumn[c].includes(Tag.FILTRO_ESCOLHA)) {
+        const choices = data.cols[c].choices;
+        if (!choices) {
+          console.error(
+            `unexpected missing choices in column ${data.cols[c].name}`
+          );
+        } else if (!choices.includes(content)) {
+          choices.push(content);
+        }
       }
 
       if (timeStampIndices.has(data.cols[c].name)) {

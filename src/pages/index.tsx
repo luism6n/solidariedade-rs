@@ -3,7 +3,7 @@
 import Card from "@/components/Card";
 import Header, { type NetworkState } from "@/components/Header";
 import { Sheet } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState<Sheet | null>(null);
@@ -14,9 +14,9 @@ export default function Home() {
     lastFetchTime: null,
   });
 
-  const handleSearchResults = (filteredData: Sheet) => {
+  const handleSearchResults = useCallback((filteredData: Sheet) => {
     setSearchResults(filteredData);
-  };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,13 +93,7 @@ export default function Home() {
         setSearchResults={handleSearchResults}
         networkState={networkState}
       />
-      {/* <div className="MAP h-72 w-full bg-yellow-400">MAPA</div>
-      <div className="bg-teal-600 p-lg font-semibold text-white hover:underline">
-        Ver lista
-      </div>
-      <div className="bg-teal-600 p-lg font-semibold text-white hover:underline">
-        Ver mapa
-      </div> */}
+
       <main className="p-lg">
         <div className="grid grid-cols-1 gap-lg">
           {rows.length === 0 && (
