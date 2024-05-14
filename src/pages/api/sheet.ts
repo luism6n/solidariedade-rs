@@ -3,6 +3,7 @@ import { Cell, Sheet } from "@/types";
 import { parse } from "csv-parse/sync";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
+import moment from "moment";
 
 type Data = Sheet;
 
@@ -18,39 +19,21 @@ export default async function handler(
 ) {
   console.log("new request");
 
-  const sheetResponse = await fetch(
-    `https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/export?format=csv&gid=${sheetGid}`,
-    { redirect: "follow" }
-  );
-
-  if (sheetResponse.status !== 200 || !sheetResponse.body) {
-    console.error(`failed to fetch sheet ${sheetResponse.body}`);
-    res.status(502);
-    return;
-  }
-
-  let csv: unknown;
-  const body = await sheetResponse.text();
-  try {
-    csv = parse(body);
-  } catch {
-    console.error(`failed to parse sheet response: ${body}`);
-    res.status(500);
-    return;
-  }
-
-  // use zod to check it's at least a 3 rows and 1 column
-  const googleSheetSchema = z.array(z.array(z.string()).min(1)).min(3);
-
   let googleSheetData;
   try {
-    googleSheetData = googleSheetSchema.parse(csv);
+    googleSheetData = await getGoogleSheetData();
   } catch (e) {
-    console.error(`sheet response not in expected format: ${e}`);
+    console.error(e);
     res.status(500);
     return;
   }
 
+  const data = await parseCsvData(googleSheetData);
+
+  res.send(data);
+}
+
+async function parseCsvData(googleSheetData: string[][]) {
   const data: Sheet = {
     cols: [],
     rows: [],
@@ -87,10 +70,11 @@ export default async function handler(
     const tagList = tagsString.split(";").map((tag) => tag.trim());
 
     for (const tag of tagList) {
-      if (knownTags.includes(tag)) {
+      if (tag !== "" && knownTags.includes(tag)) {
         if (tag === "escondido") {
           col.hidden = true;
         } else if (tag === "atualizavel") {
+          console.log("atualizavel", col.name, c);
           col.hidden = true;
           timeStampIndices.set(col.name, c);
         }
@@ -144,12 +128,12 @@ export default async function handler(
           throw new Error("impossible to reach this, but typescript complains");
         }
 
-        const updatedAt = formatDate(row[timestampIndex]);
-        if (updatedAt) {
+        try {
+          const updatedAt = parseDate(row[timestampIndex]);
           cell.updatedAt = updatedAt.toISOString();
-        } else {
+        } catch (e) {
           console.warn(
-            `unexpected updatedAt type ${typeof updatedAt} in cell ${r},${c} with value ${updatedAt}`
+            `failed to parse date in cell ${r},${c} with value ${row[timestampIndex]}: ${e}`
           );
         }
       }
@@ -169,35 +153,46 @@ export default async function handler(
     data.rows.push({ cells });
   }
 
-  res.send(data);
+  return data;
 }
 
-function formatDate(date: unknown): Date | null {
-  if (typeof date !== "string") {
-    return null;
-  }
-
-  // Extract only what's inside the parenthesis
-  const extractedContents = date.match(/\(([^)]+)\)/)?.[1];
-
-  if (!extractedContents) {
-    return null;
-  }
-
-  // Split the contents by commas to get individual values
-  const [year, month, day, hour, minute, second] = extractedContents.split(",");
-
-  // Create a new Date object using the extracted values
-  const formattedDate = new Date(
-    parseInt(year),
-    parseInt(month) - 1, // Month is zero-based in JavaScript Date object
-    parseInt(day),
-    parseInt(hour),
-    parseInt(minute),
-    parseInt(second)
+async function getGoogleSheetData() {
+  const sheetResponse = await fetch(
+    `https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/export?format=csv&gid=${sheetGid}`,
+    { redirect: "follow" }
   );
 
-  return formattedDate;
+  if (sheetResponse.status !== 200 || !sheetResponse.body) {
+    throw new Error(`failed to fetch sheet ${sheetResponse.body}`);
+  }
+
+  let csv: unknown;
+  const body = await sheetResponse.text();
+  try {
+    csv = parse(body);
+  } catch {
+    throw new Error(`failed to parse sheet response: ${body}`);
+  }
+
+  // use zod to check it's at least a 3 rows and 1 column
+  const googleSheetSchema = z.array(z.array(z.string()).min(1)).min(3);
+
+  let googleSheetData;
+  try {
+    googleSheetData = googleSheetSchema.parse(csv);
+  } catch (e) {
+    throw new Error(`sheet response not in expected format: ${e}`);
+  }
+
+  return googleSheetData;
+}
+
+function parseDate(date: unknown): Date {
+  if (typeof date !== "string") {
+    throw new Error(`unexpected date type ${typeof date}`);
+  }
+
+  return moment(date, "DD/MM HH:mm").toDate();
 }
 
 function stringHasContent(str: string): boolean {
