@@ -20,7 +20,6 @@ export interface Row {
   cells: Cell[];
 }
 
-// TODO: content should also accept string[] and list should be removed
 // TODO: updatedAt should be an ISO date string
 export type Cell = {
   content: string[] | string | number | null;
