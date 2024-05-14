@@ -84,9 +84,16 @@ async function parseCsvData(googleSheetData: string[][]) {
     }
   }
 
+  let numRowsSkipped = 0;
   for (let r = 3; r < googleSheetData.length; r++) {
     const row = googleSheetData[r];
     const cells: Cell[] = [];
+
+    // remove empty rows (rows with all null content or just the ID column)
+    if (row.every((cell, i) => cell === "" || data.cols[i].name === "ID")) {
+      numRowsSkipped++;
+      continue;
+    }
 
     for (let c = 0; c < row.length; c++) {
       const content = row[c];
@@ -139,17 +146,10 @@ async function parseCsvData(googleSheetData: string[][]) {
       cells.push(cell);
     }
 
-    // remove empty rows (rows with all null content or just the ID column)
-    if (
-      cells.every(
-        (cell, i) => cell.content === null || data.cols[i].name === "ID"
-      )
-    ) {
-      continue;
-    }
-
     data.rows.push({ cells });
   }
+
+  console.log("skipped", numRowsSkipped, "empty rows");
 
   return data;
 }
