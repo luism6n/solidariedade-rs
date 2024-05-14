@@ -28,34 +28,3 @@ export type Cell = {
   // true when content should become a query in a Google maps link
   googleMaps?: boolean;
 };
-
-// Google Sheet API response types
-export interface GoogleSheet {
-  version: string;
-  reqId: string;
-  status: string;
-  sig: string;
-  table: GoogleSheetTable;
-}
-
-export interface GoogleSheetTable {
-  cols: GoogleSheetCol[];
-  rows: GoogleSheetRow[];
-  parsedNumHeaders: number;
-}
-
-export interface GoogleSheetCol {
-  id: string;
-  label: string;
-  type: string;
-  pattern?: string;
-}
-
-export interface GoogleSheetRow {
-  c: GoogleSheetRowCell[] | undefined[];
-}
-
-export interface GoogleSheetRowCell {
-  v: unknown;
-  f?: string;
-}
