@@ -1,17 +1,7 @@
-import { Cell, Sheet } from "@/types";
-import { useState } from "react";
+import { Sheet } from "@/types";
 import { PiInfo, PiMagnifyingGlassBold } from "react-icons/pi";
 import TitleLogo from "./TitleLogo";
 import FilterDropdown from "./FilterDropdown";
-
-function normalizeCellForComparison(content: Cell["content"]) {
-  if (content === null) return "";
-  return content
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
 
 export interface NetworkState {
   online: boolean;
@@ -20,36 +10,23 @@ export interface NetworkState {
 
 interface HeaderProps {
   data: Sheet;
-  setSearchResults: (filteredData: Sheet) => void;
+  searchQuery: string;
+  onSearch: (query: string) => void;
+  onFilter: (columnIndex: number, value: any) => void;
+  chosenValues: Record<number, any>;
+  clearFilters: () => void;
   networkState: NetworkState;
 }
 
 export default function Header({
   data,
-  setSearchResults,
+  searchQuery,
+  onSearch,
+  onFilter,
+  chosenValues,
+  clearFilters,
   networkState,
 }: HeaderProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (value: string) => {
-    const normalizedQuery = normalizeCellForComparison(value);
-    if (normalizedQuery.trim() !== "") {
-      const filteredData: Sheet = {
-        ...data,
-        rows: data.rows.filter((row) => {
-          return row?.cells.some((cell) =>
-            normalizeCellForComparison(cell.content).includes(normalizedQuery)
-          );
-        }),
-      };
-
-      setSearchResults(filteredData);
-    } else {
-      setSearchResults(data);
-    }
-    setSearchQuery(value);
-  };
-
   return (
     <header className="w-full sticky top-0">
       <div className="p-lg laptop:p-lg bg-green flex flex-col gap-md laptop:gap-lg">
@@ -66,7 +43,7 @@ export default function Header({
             className="w-full"
             placeholder="Buscar por abrigo, cidade, bairro..."
             value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => onSearch(e.target.value)}
           />
           <button type="submit" aria-label="Buscar">
             <PiMagnifyingGlassBold className="text-2xl text-stone-700" />
@@ -74,7 +51,12 @@ export default function Header({
         </form>
       </div>
 
-      <FilterDropdown data={data} setSearchResults={setSearchResults} />
+      <FilterDropdown
+        data={data}
+        onFilter={onFilter}
+        chosenValues={chosenValues}
+        clearFilters={clearFilters}
+      />
 
       {!networkState.online && networkState.lastFetchTime && (
         <div className="p-sm bg-stone-200">
