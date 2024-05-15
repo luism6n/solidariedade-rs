@@ -1,8 +1,12 @@
-import { Sheet } from "@/types";
+import { Col, Sheet } from "@/types";
 import {
   Field,
   Fieldset,
   Label,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
   Menu,
   MenuButton,
   MenuItems,
@@ -10,10 +14,91 @@ import {
 } from "@headlessui/react";
 import { Roboto } from "next/font/google";
 import { useState } from "react";
-import { PiCaretDownFill } from "react-icons/pi";
+import {
+  PiCaretDownBold,
+  PiCaretDownFill,
+  PiCheckSquareBold,
+  PiSquareBold,
+} from "react-icons/pi";
 import { twMerge } from "tailwind-merge";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
+
+function isMultiSelect(col: Col) {
+  return col.filterWithOr || col.filterWithAnd;
+}
+
+function FieldFilter({
+  col,
+  chosenValues,
+  onFilter,
+}: {
+  col: Col;
+  chosenValues: Record<number, any>;
+  onFilter: (columnIndex: number, value: any) => void;
+}) {
+  if (!col.choices) return null;
+
+  if (!isMultiSelect(col)) {
+    return (
+      <Field>
+        <Label className="block text-white">{col.name}</Label>
+        <Select
+          className="w-full block rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500"
+          name={col.name}
+          aria-label={col.name}
+          value={chosenValues[col.index] || ""}
+          onChange={(e) => onFilter(col.index, e.target.value)}
+        >
+          <option value="" color="#FFF">
+            Selecionar
+          </option>
+          {col.choices.map((choice) => (
+            <option key={choice} value={choice}>
+              {choice}
+            </option>
+          ))}
+        </Select>
+      </Field>
+    );
+  } else {
+    return (
+      <Field>
+        <Listbox
+          value={chosenValues[col.index]}
+          onChange={(value) => onFilter(col.index, value)}
+          multiple
+        >
+          <Label className="block text-white">{col.name}</Label>
+          <ListboxButton className="w-full bg-gray-200 flex flex-row- justify-between items-center rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500">
+            <span>{"Selecionar um ou mais"}</span>
+            <PiCaretDownBold />
+          </ListboxButton>
+          <ListboxOptions className="bg-mbp-red-900 p-md w-full">
+            {col.choices.sort().map((choice) => (
+              <ListboxOption
+                key={choice}
+                value={choice}
+                className="flex flex-row gap-x-1 items-center cursor-pointer group-data-[focus]:bg-stone-500 px-2 bg-white text-black"
+              >
+                {({ focus, selected }) => (
+                  <>
+                    {selected ? (
+                      <PiCheckSquareBold className="text-black" />
+                    ) : (
+                      <PiSquareBold className="text-black" />
+                    )}
+                    <span>{choice}</span>
+                  </>
+                )}
+              </ListboxOption>
+            ))}
+          </ListboxOptions>
+        </Listbox>
+      </Field>
+    );
+  }
+}
 
 function Filters({
   data,
@@ -30,30 +115,14 @@ function Filters({
 }) {
   return (
     <Fieldset className={"flex flex-col gap-lg " + roboto.className}>
-      {data.cols.map(
-        (col) =>
-          col.choices && (
-            <Field key={`${col.name}-${col.index}`}>
-              <Label className="block text-white">{col.name}</Label>
-              <Select
-                className="w-full block rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500"
-                name={col.name}
-                aria-label={col.name}
-                value={chosenValues[col.index] || ""}
-                onChange={(e) => onFilter(col.index, e.target.value)}
-              >
-                <option value="" color="#FFF">
-                  Selecionar
-                </option>
-                {col.choices.map((choice) => (
-                  <option key={choice} value={choice}>
-                    {choice}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          )
-      )}
+      {data.cols.map((col) => (
+        <FieldFilter
+          key={`${col.name}-${col.index}`}
+          col={col}
+          chosenValues={chosenValues}
+          onFilter={onFilter}
+        />
+      ))}
 
       <Field className="flex justify-between items-center text-white">
         <button

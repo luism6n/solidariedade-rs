@@ -75,7 +75,13 @@ async function parseCsvData(googleSheetData: string[][]) {
         timeStampIndices.set(col.name, c);
       }
 
-      if (tag === Tag.FILTRO_ESCOLHA) {
+      if (tag === Tag.FILTRO_QUALQUER_ESCOLHIDO) {
+        col.choices = [];
+        col.filterWithOr = true;
+      } else if (tag === Tag.FILTRO_TODOS_ESCOLHIDOS) {
+        col.choices = [];
+        col.filterWithAnd = true;
+      } else if (tag === Tag.FILTRO_ESCOLHA) {
         col.choices = [];
       }
 
@@ -130,7 +136,11 @@ async function parseCsvData(googleSheetData: string[][]) {
         cell.googleMaps = true;
       }
 
-      if (tagsInColumn[c].includes(Tag.FILTRO_ESCOLHA)) {
+      if (
+        tagsInColumn[c].includes(Tag.FILTRO_ESCOLHA) ||
+        tagsInColumn[c].includes(Tag.FILTRO_QUALQUER_ESCOLHIDO) ||
+        tagsInColumn[c].includes(Tag.FILTRO_TODOS_ESCOLHIDOS)
+      ) {
         const choices = data.cols[c].choices;
         if (!choices) {
           console.error(

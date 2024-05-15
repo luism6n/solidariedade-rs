@@ -1,10 +1,10 @@
 "use client";
 
 import Card from "@/components/Card";
-import { type NetworkState } from "@/components/Header";
 import Layout from "@/components/Layout";
+import { type NetworkState } from "@/components/Header";
 import { Cell, Col, Row, Sheet } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function normalizeCellForComparison(content: Cell["content"]) {
   if (content === null) return "";
@@ -24,23 +24,31 @@ export default function Home() {
     lastFetchTime: null,
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [chosenValues, setChosenValues] = useState<Record<number, any>>({});
+  const [chosenValues, setChosenValues] = useState<
+    Record<number, Cell["content"]>
+  >({});
 
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-  };
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearchQuery(value);
+    },
+    [setSearchQuery]
+  );
 
-  const handleFilter = (colIndex: number, choice: string) => {
-    setChosenValues((prev) => ({
-      ...prev,
-      [colIndex]: choice,
-    }));
-  };
+  const handleFilter = useCallback(
+    (colIndex: number, choice: string) => {
+      setChosenValues((prev) => ({
+        ...prev,
+        [colIndex]: choice,
+      }));
+    },
+    [setChosenValues]
+  );
 
-  function handleClear() {
+  const handleClear = useCallback(() => {
     setChosenValues({});
     setSearchQuery("");
-  }
+  }, [setChosenValues, setSearchQuery]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,11 +126,28 @@ export default function Home() {
     filteredData = {
       ...filteredData,
       rows: filteredData.rows.filter((row) => {
-        return row.cells.every(
-          (cell, index) =>
-            chosenValues[index] === undefined ||
-            cell.content === chosenValues[index]
-        );
+        return row.cells.every((cell, index) => {
+          if (chosenValues === null) {
+            return true;
+          }
+
+          const value = chosenValues[index];
+          const content = cell.content;
+
+          if (!value || !content || typeof content !== "string") {
+            return true;
+          }
+
+          if (!Array.isArray(value)) {
+            return content === value;
+          } else {
+            if (data.cols[index].filterWithOr) {
+              return value.includes(content);
+            } else if (data.cols[index].filterWithAnd) {
+              return value.every((value: string) => content === value);
+            }
+          }
+        });
       }),
     };
 

@@ -4,6 +4,8 @@ export enum Tag {
   LISTA = "lista",
   GOOGLE_MAPS = "google-maps",
   FILTRO_ESCOLHA = "filtro-escolha",
+  FILTRO_QUALQUER_ESCOLHIDO = "filtro-qualquer-escolhido",
+  FILTRO_TODOS_ESCOLHIDOS = "filtro-todos-escolhidos",
 }
 
 export interface Sheet {
@@ -16,7 +18,8 @@ export interface Col {
   index: number;
   name: string;
   hidden?: boolean;
-  multiselect?: boolean;
+  filterWithOr?: boolean;
+  filterWithAnd?: boolean;
   choices?: string[];
 }
 
