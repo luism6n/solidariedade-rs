@@ -1,6 +1,13 @@
 import { createCustomEqual, type State } from "fast-equals";
 import { useEffect, useRef } from "react";
 
+export type Place = {
+  status: string; // "full" | "vacancies";
+  id: number;
+  name: string;
+  position: { lat: number; lng: number };
+};
+
 type MaybeLatLngLiteral = google.maps.LatLngLiteral | null;
 
 const isLatLngLiteral = (obj: unknown): obj is MaybeLatLngLiteral => {
