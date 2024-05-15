@@ -1,21 +1,14 @@
-import { type MarkerExtended } from "@react-google-maps/marker-clusterer";
 import { motion } from "framer-motion";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
 import MarkerOverlay from "./MarkerOverlay";
+import { Place } from "./mapUtils";
 
-export type Place = {
-  status: string; // "full" | "vacancies";
-  id: number;
-  name: string;
-  position: { lat: number; lng: number };
-};
-
-export interface CustomMarkerProps extends MarkerExtended {
+export interface CustomMarkerProps extends google.maps.MarkerOptions {
   place: Place;
   position: google.maps.LatLngLiteral;
   map?: google.maps.Map;
-  onClick: (payload: any) => void;
+  onClick: (payload: Place) => void;
   highlight?: boolean;
   status?: string;
 }
@@ -37,7 +30,7 @@ export function transformPlaceToMarker({
     icon: null,
     label: place.name,
     opacity: 1,
-    title: "",
+    title: place.status,
     visible: true,
     zIndex: 0,
     animation: null,
@@ -47,9 +40,6 @@ export function transformPlaceToMarker({
 export default function CustomMarker({
   place,
   position,
-  //   cursor,
-  //   animation,
-  //   icon,
   map,
   onClick,
   highlight,
@@ -92,7 +82,7 @@ export default function CustomMarker({
                   "border-2 border-mbp-green-500"
                 )}
               >
-                {place?.name ?? "No name"}
+                {place?.name}
               </div>
             </button>
           </motion.div>

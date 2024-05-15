@@ -1,15 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import BaseMap from "./BaseMap";
-import CustomMarker, {
-  Place,
-  transformPlaceToMarker,
-  type CustomMarkerProps,
-} from "./CustomMarker";
-
-type Cluster = {
-  position: { lat: number; lng: number };
-  count: number;
-};
+import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
+import { Place } from "./mapUtils";
 
 function MBPMap() {
   const onIdle = (map: google.maps.Map) => {
@@ -25,21 +17,6 @@ function MBPMap() {
   const [center, setCenter] = useState({ lat: -30.0346471, lng: -51.2176584 }); // Porto Alegre
   const [zoom, setZoom] = useState(7);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  const mapRef = useRef(null);
-
-  // Update the mapRef when the map is loaded
-  const onMapLoad = useCallback((map: null) => {
-    mapRef.current = map;
-  }, []);
-
-  function onClusterClick({ cluster }: { cluster: Cluster }) {
-    if (mapRef.current) {
-      setCenter({ lat: cluster.position.lat, lng: cluster.position.lng });
-      setZoom(zoom + 2); // Zoom in by 2 levels
-    }
-  }
-
-  //   const { openDialog } = useDialog();
 
   const data: { places: Place[] } = {
     places: [
@@ -68,12 +45,18 @@ function MBPMap() {
 
   const markers: CustomMarkerProps[] = useMemo(() => {
     return (
-      data.places?.map((place) =>
-        transformPlaceToMarker({ place, onClick: onMarkerClick })
-      ) ?? []
+      data.places?.map((place) => ({
+        place,
+        onClick: onMarkerClick,
+        getAnimation: () => null,
+        setAnimation: () => {}, // Defina apenas os setters que você precisa modificar
+        setClickable: () => {}, // Defina apenas os setters que você precisa modificar
+        position: place.position,
+        label: place.name,
+        cursor: "pointer",
+      })) ?? []
     );
   }, [data.places, onMarkerClick]);
-
   let map: google.maps.Map;
   async function initMap(): Promise<void> {
     const { Map } = (await google.maps.importLibrary(
@@ -101,7 +84,6 @@ function MBPMap() {
           minZoom={2}
           maxZoom={18}
           onIdle={onIdle}
-          // onClick={onMapClick}
           fullscreenControl={false}
           streetViewControl={false}
           mapTypeControl={false}
@@ -109,21 +91,10 @@ function MBPMap() {
           clickableIcons={false}
         >
           {markers
-            ?.filter((m) => m.position.lat && m.position.lng)
+            ?.filter((m) => m.position?.lat && m.position.lng)
             .map((marker, i) => (
               <CustomMarker key={i} {...marker} />
             ))}
-          {/*           
-                    {clusters.map((cluster, index) => (
-                        <ClustererMarker
-                            key={index}
-                            lat={cluster.position.lat}
-                            lng={cluster.position.lng}
-                            label={String(cluster.count)}
-                            onClick={() => onClusterClick({ cluster: cluster })}
-                        // ... outros props
-                        />
-                    ))} */}
         </BaseMap>
       </div>
     </>
