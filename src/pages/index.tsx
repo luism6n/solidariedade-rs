@@ -2,7 +2,7 @@
 
 import Card from "@/components/Card";
 import Header, { type NetworkState } from "@/components/Header";
-import { Sheet } from "@/types";
+import { Cell, Sheet } from "@/types";
 import { useEffect, useState } from "react";
 
 function normalizeCellForComparison(content: Cell["content"]) {
