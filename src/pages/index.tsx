@@ -1,8 +1,9 @@
 "use client";
 
 import Card from "@/components/Card";
-import Header, { type NetworkState } from "@/components/Header";
-import { Cell, Sheet } from "@/types";
+import { type NetworkState } from "@/components/Header";
+import Layout from "@/components/Layout";
+import { Cell, Col, Row, Sheet } from "@/types";
 import { useEffect, useState } from "react";
 
 function normalizeCellForComparison(content: Cell["content"]) {
@@ -143,32 +144,40 @@ export default function Home() {
   const { cols, rows } = searchResults || data;
 
   return (
-    <>
-      <Header
-        data={data}
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        chosenValues={chosenValues}
-        clearFilters={handleClear}
-        searchQuery={searchQuery}
-        networkState={networkState}
-      />
+    <Layout
+      props={{
+        headerProps: {
+          data: data,
+          onSearch: handleSearch,
+          onFilter: handleFilter,
+          chosenValues: chosenValues,
+          clearFilters: handleClear,
+          searchQuery: searchQuery,
+          networkState: networkState,
+        },
+      }}
+    >
+      <div className="p-md">
+        <p className="font-medium">
+          Encontre locais precisando de doações e atendimento voluntário.
+        </p>
+        <p>Região atendida: Porto Alegre, RS</p>
+      </div>
+      {rows.length === 0 ? (
+        <p className="text-center">Nenhum resultado encontrado.</p>
+      ) : (
+        <Cards cols={cols} rows={rows} />
+      )}
+    </Layout>
+  );
+}
 
-      <main className="p-lg bg-mbp-gray">
-        <div className="gap-lg mb-4">
-          <p className="font-medium">
-            Encontre locais precisando de doações e atendimento voluntário.
-          </p>
-          <p>Região atendida: Porto Alegre, RS</p>
-        </div>
-        <div className="grid grid-cols-1 gap-lg">
-          {rows.length === 0 && (
-            <p className="text-center">Nenhum resultado encontrado.</p>
-          )}
-          {rows.length !== 0 &&
-            rows.map((row, i) => <Card key={i} cols={cols} row={row} />)}
-        </div>
-      </main>
-    </>
+function Cards({ cols, rows }: { cols: Col[]; rows: Row[] }) {
+  return (
+    <div className="grid grid-cols-1 laptop:grid-cols-2 desktop:grid-cols-3 gap-lg">
+      {rows.map((row, i) => (
+        <Card key={i} cols={cols} row={row} />
+      ))}
+    </div>
   );
 }

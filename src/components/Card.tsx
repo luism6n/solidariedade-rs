@@ -18,7 +18,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={i}
-              className="rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
+              className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
             >
               <p className="font-semibold text-stone-700">{label}</p>
               <div className="flex flex-wrap gap-xs">
@@ -54,7 +54,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={i}
-              className="rounded-md border border-stone-200 bg-white p-md flex flex-col gap-md"
+              className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
             >
               <div className="flex gap-md">
                 <p className="font-semibold text-stone-700">{label}: </p>

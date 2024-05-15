@@ -10,19 +10,12 @@ const config: Config = {
     screens: {
       tablet: "640px",
       // => @media (min-width: 640px) { ... }
-
       laptop: "1024px",
       // => @media (min-width: 1024px) { ... }
-
       desktop: "1350px",
       // => @media (min-width: 1280px) { ... }
     },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
       spacing: {
         xs: "0.25rem", // 4px
         sm: "0.375rem", // 6px (4px * 1.618 ≈ 6)
