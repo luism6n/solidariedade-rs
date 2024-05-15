@@ -7,10 +7,6 @@ import { z } from "zod";
 
 type Data = Sheet;
 
-// gid can be obtained checking the gid query param in the address bar when
-// accessing the sheet from a browser
-const sheetGid = process.env.NODE_ENV === "development" ? "1025587008" : "0";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -54,9 +50,7 @@ async function parseCsvData(googleSheetData: string[][]) {
     const tagsString = tagRow[c];
     if (typeof tagsString !== "string") {
       console.warn(
-        `unexpected data type in tag column: ${typeof tagsString} in column ${
-          col.name
-        }`
+        `unexpected data type in tag column: ${typeof tagsString} in column ${col.name}`
       );
       continue;
     }
@@ -158,7 +152,7 @@ async function parseCsvData(googleSheetData: string[][]) {
 
 async function getGoogleSheetData() {
   const sheetResponse = await fetch(
-    `https://docs.google.com/spreadsheets/d/1sKzh0Do_2fvIqhjwm-mNs5XaH6QOrvC-xTbYlnFg5bE/export?format=csv&gid=${sheetGid}`,
+    `https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_SHEET_ID}/export?format=csv&gid=${process.env.NEXT_PUBLIC_SHEET_GID}`,
     { redirect: "follow" }
   );
 
