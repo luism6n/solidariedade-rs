@@ -27,3 +27,12 @@ body {
 .bg-wine {
   background: #75221C;
 }
+
+.bg-gray {
+  background: #EFEFEF;
+}
+
+.border-card {
+  border: 1px solid #D6D2D2;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}

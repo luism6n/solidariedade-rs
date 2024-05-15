@@ -94,7 +94,11 @@ export default function Home() {
         networkState={networkState}
       />
 
-      <main className="p-lg">
+      <main className="p-lg bg-gray">
+        <div className="gap-lg mb-4">
+          <p className="font-medium">Encontre locais precisando de doações e atendimento voluntário.</p>
+          <p>Região atendida: Porto Alegre, RS</p>
+        </div>
         <div className="grid grid-cols-1 gap-lg">
           {rows.length === 0 && (
             <p className="text-center">Nenhum resultado encontrado.</p>

@@ -5,7 +5,7 @@ import Pill from "./Pill";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   return (
-    <div className="bg-stone-100 p-md flex flex-col gap-lg rounded-md border border-stone-700">
+    <div className="bg-white p-md flex flex-col gap-lg rounded-md border-card">
       {cols.map((col, i) => {
         const { content, updatedAt, googleMaps } = row.cells[i];
         const label = col.name;
