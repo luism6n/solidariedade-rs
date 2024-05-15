@@ -19,3 +19,8 @@ body {
     text-wrap: balance;
   }
 }
+
+.bg-green {
+  background: #017A73;
+}
+

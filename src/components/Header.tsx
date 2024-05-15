@@ -51,8 +51,8 @@ export default function Header({
 
   return (
     <header className="w-full sticky top-0">
-      <div className="p-md laptop:p-lg bg-rose-700 flex flex-col gap-md laptop:gap-lg">
-        <div className="w-full flex justify-between items-center">
+      <div className="p-lg laptop:p-lg bg-green flex flex-col gap-md laptop:gap-lg">
+        <div className="w-full flex justify-between items-end">
           <TitleLogo />
           <PiInfo className="text-4xl" color="white" />
         </div>
