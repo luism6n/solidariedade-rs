@@ -15,9 +15,7 @@ export interface CustomMarkerProps extends google.maps.MarkerOptions {
 
 export function transformPlaceToMarker({
   place,
-}: // onClick,
-// highlight,
-{
+}: {
   place: Place;
   onClick: (payload: Place) => void;
   highlight?: boolean;
@@ -48,46 +46,38 @@ export default function CustomMarker({
     onClick(place);
   }, [onClick, place]);
 
-  return (
-    <>
-      {map && (
-        <MarkerOverlay
-          position={position}
-          map={map}
-          zIndex={highlight ? 99 : 0}
-        >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { delay: Math.random() * 0.3 } }}
-            exit={{ opacity: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 20,
-            }}
-          >
-            <button
-              className={twMerge(
-                "rounded-full aspect-square overflow-hidden ring-2 shadow-lg",
-                // place.status === "full" ? "ring-red-500" : "ring-green-500"
-                ""
-              )}
-              onClick={handleClick}
-            >
-              {/* <Image src={""} alt={place.name} width={50} height={50} /> */}
+  if (!map) {
+    return null;
+  }
 
-              <div
-                className={twMerge(
-                  "flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md",
-                  "border-2 border-mbp-green-500"
-                )}
-              >
-                {place?.name}
-              </div>
-            </button>
-          </motion.div>
-        </MarkerOverlay>
-      )}
-    </>
+  return (
+    <MarkerOverlay position={position} map={map} zIndex={highlight ? 99 : 0}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { delay: Math.random() * 0.3 } }}
+        exit={{ opacity: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 20,
+        }}
+      >
+        <button
+          className={twMerge(
+            "rounded-full aspect-square overflow-hidden ring-2 shadow-lg"
+          )}
+          onClick={handleClick}
+        >
+          <div
+            className={twMerge(
+              "flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md",
+              "border-2 border-mbp-green-500"
+            )}
+          >
+            {place?.name}
+          </div>
+        </button>
+      </motion.div>
+    </MarkerOverlay>
   );
 }
