@@ -8,6 +8,34 @@ export type Place = {
   position: { lat: number; lng: number };
 };
 
+export async function getGeocoding(
+  address: string
+): Promise<{ lat: number | null; lng: number | null }> {
+  const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+    address
+  )}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
+
+  try {
+    const response = await fetch(geocodingUrl);
+    const data = await response.json();
+
+    if (data.status === "OK") {
+      const location = data.results[0].geometry.location;
+      const latitude = location.lat;
+      const longitude = location.lng;
+
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+      return { lat: latitude, lng: longitude };
+    } else {
+      console.error("Erro ao converter endereço em coordenadas:", data.status);
+      return { lat: null, lng: null };
+    }
+  } catch (error) {
+    console.error("Erro ao processar a solicitação de geocodificação:", error);
+    return { lat: null, lng: null };
+  }
+}
+
 type MaybeLatLngLiteral = google.maps.LatLngLiteral | null;
 
 const isLatLngLiteral = (obj: unknown): obj is MaybeLatLngLiteral => {

@@ -1,64 +1,48 @@
 // import MBPMap from "@/components/maps/MBPMap";
 import MBPMap from "@/components/maps/MBPMap";
+import { Place, getGeocoding } from "@/components/maps/mapUtils";
 import { useScript } from "@/hooks/useScript";
-import React, { SetStateAction } from "react";
 
 export default function Test() {
   const { isLoaded } = useScript({ name: "googleMaps" });
 
-  // let map: google.maps.Map;
-  // async function initMap(): Promise<void> {
-  //   const { Map } = (await google.maps.importLibrary(
-  //     "maps"
-  //   )) as google.maps.MapsLibrary;
-  //   map = new Map(document.getElementById("map") as HTMLElement, {
-  //     center: { lat: -34.397, lng: 150.644 },
-  //     zoom: 8,
-  //   });
-  // }
-
-  // initMap();
-
-  const containerStyle = {
-    width: "400px",
-    height: "400px",
+  const data: { places: Place[] } = {
+    places: [
+      {
+        id: 1,
+        name: "São Paulo",
+        position: { lat: -23.5505199, lng: -46.6333094 },
+        status: "full",
+      },
+      {
+        id: 2,
+        name: "Rio de Janeiro",
+        position: { lat: -22.9068467, lng: -43.1728965 },
+        status: "vacancies",
+      },
+    ],
   };
 
-  const center = {
-    lat: -3.745,
-    lng: -38.523,
-  };
-  const [map, setMap] = React.useState(null);
-
-  const onLoad = React.useCallback(function callback(map: google.maps.Map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-
-    setMap(map as unknown as SetStateAction<null>); // fix this
-  }, []);
-
-  const onUnmount = React.useCallback(function callback(map: google.maps.Map) {
-    setMap(null);
-  }, []);
+  const randomAddress =
+    "Av. Paulista, 1578 - Bela Vista, São Paulo - SP, 01310-200, Brazil";
+  const { lat, lng } = getGeocoding(randomAddress);
 
   return (
     <div className="">
-      <h1>TEST</h1>
-      {/* {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-        >
-          <></>
-        </GoogleMap>
-      ) : (
-        <></>
-      )} */}
+      <h1>MAPA (test)</h1>
+      <p>Test address: {randomAddress}</p>
+      <p>
+        Geocoded Address:
+        {lat && lng ? (
+          <span>
+            Latitude: {lat}, Longitude: {lng}
+          </span>
+        ) : (
+          <span>Erro ao converter endereço em coordenadas</span>
+        )}
+      </p>
 
-      {isLoaded ? <MBPMap /> : <></>}
+      {isLoaded ? <MBPMap data={data} /> : <p>Carregando Mapa...</p>}
     </div>
   );
 }

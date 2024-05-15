@@ -3,7 +3,7 @@ import BaseMap from "./BaseMap";
 import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
 
-function MBPMap() {
+function MBPMap({ data }: { data: { places: Place[] } }) {
   const onIdle = (map: google.maps.Map) => {
     setZoom(map.getZoom()!);
 
@@ -18,26 +18,9 @@ function MBPMap() {
   const [zoom, setZoom] = useState(7);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
-  const data: { places: Place[] } = {
-    places: [
-      {
-        id: 1,
-        name: "São Paulo",
-        position: { lat: -23.5505199, lng: -46.6333094 },
-        status: "full",
-      },
-      {
-        id: 2,
-        name: "Rio de Janeiro",
-        position: { lat: -22.9068467, lng: -43.1728965 },
-        status: "vacancies",
-      },
-    ],
-  };
-
   const onMarkerClick = useCallback(
     (payload: Place) => {
-      // openDialog(<PetMapDialog pet={payload} />);
+      // should open a modal or something
       console.log(selectedPlace);
     },
     [selectedPlace]
