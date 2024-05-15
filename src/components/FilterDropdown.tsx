@@ -1,12 +1,19 @@
-import { Menu, MenuButton, MenuItems } from "@headlessui/react";
+import { Sheet } from "@/types";
+import {
+  Field,
+  Fieldset,
+  Label,
+  Menu,
+  MenuButton,
+  MenuItems,
+  Select,
+} from "@headlessui/react";
+import { Roboto } from "next/font/google";
 import { useState } from "react";
 import { PiCaretDownFill } from "react-icons/pi";
 import { twMerge } from "tailwind-merge";
-import { Roboto } from "next/font/google";
-import { Field, Fieldset, Label, Select } from "@headlessui/react";
-import { Sheet } from "@/types";
 
-const roboto = Roboto({ subsets: ['latin'], weight: ["400", "500", "700"] });
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 function Filters({
   data,
@@ -35,7 +42,9 @@ function Filters({
                 value={chosenValues[col.index] || ""}
                 onChange={(e) => onFilter(col.index, e.target.value)}
               >
-                <option value="" color="#FFF">Selecionar</option>
+                <option value="" color="#FFF">
+                  Selecionar
+                </option>
                 {col.choices.map((choice) => (
                   <option key={choice} value={choice}>
                     {choice}
@@ -56,7 +65,7 @@ function Filters({
         </button>
         <button
           type="submit"
-          className="bg-green p-md rounded-md uppercase hover:underline text-sm font-medium"
+          className="bg-mbp-green-700 p-md rounded-md uppercase hover:underline text-sm font-medium"
           onClick={closeMenu}
         >
           Filtrar
@@ -80,7 +89,7 @@ export default function FilterDropdown({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex w-full justify-center bg-wine text-white p-md">
+    <div className="flex w-full justify-center bg-mbp-red-900 text-white p-md">
       <Menu>
         {({ close }) => (
           <>
@@ -98,7 +107,7 @@ export default function FilterDropdown({
                 />
               </div>
             </MenuButton>
-            <MenuItems anchor="bottom" className="bg-wine p-lg w-full">
+            <MenuItems anchor="bottom" className="bg-mbp-red-900 p-lg w-full">
               <Filters
                 data={data}
                 onFilter={onFilter}
