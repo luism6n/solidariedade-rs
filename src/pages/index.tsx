@@ -3,7 +3,16 @@
 import Card from "@/components/Card";
 import Header, { type NetworkState } from "@/components/Header";
 import { Sheet } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+function normalizeCellForComparison(content: Cell["content"]) {
+  if (content === null) return "";
+  return content
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
 export default function Home() {
   const [data, setData] = useState<Sheet | null>(null);
@@ -13,10 +22,24 @@ export default function Home() {
     online: true,
     lastFetchTime: null,
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [chosenValues, setChosenValues] = useState<Record<number, any>>({});
 
-  const handleSearchResults = useCallback((filteredData: Sheet) => {
-    setSearchResults(filteredData);
-  }, []);
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+  };
+
+  const handleFilter = (colIndex: number, choice: string) => {
+    setChosenValues((prev) => ({
+      ...prev,
+      [colIndex]: choice,
+    }));
+  };
+
+  function handleClear() {
+    setChosenValues({});
+    setSearchQuery("");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +95,39 @@ export default function Home() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!data) return;
+
+    // filter by search query
+    const normalizedQuery = normalizeCellForComparison(searchQuery);
+    let filteredData: Sheet = data;
+
+    if (normalizedQuery.trim() !== "" && data) {
+      filteredData = {
+        ...filteredData,
+        rows: filteredData.rows.filter((row) => {
+          return row?.cells.some((cell) =>
+            normalizeCellForComparison(cell.content).includes(normalizedQuery)
+          );
+        }),
+      };
+    }
+
+    // filter by chosen values
+    filteredData = {
+      ...filteredData,
+      rows: filteredData.rows.filter((row) => {
+        return row.cells.every(
+          (cell, index) =>
+            chosenValues[index] === undefined ||
+            cell.content === chosenValues[index]
+        );
+      }),
+    };
+
+    setSearchResults(filteredData);
+  }, [chosenValues, data, setSearchResults, searchQuery, setChosenValues]);
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -90,7 +146,11 @@ export default function Home() {
     <>
       <Header
         data={data}
-        setSearchResults={handleSearchResults}
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        chosenValues={chosenValues}
+        clearFilters={handleClear}
+        searchQuery={searchQuery}
         networkState={networkState}
       />
 

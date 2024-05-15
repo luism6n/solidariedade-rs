@@ -50,7 +50,9 @@ async function parseCsvData(googleSheetData: string[][]) {
     const tagsString = tagRow[c];
     if (typeof tagsString !== "string") {
       console.warn(
-        `unexpected data type in tag column: ${typeof tagsString} in column ${col.name}`
+        `unexpected data type in tag column: ${typeof tagsString} in column ${
+          col.name
+        }`
       );
       continue;
     }
@@ -174,7 +176,9 @@ async function getGoogleSheetData() {
   );
 
   if (sheetResponse.status !== 200 || !sheetResponse.body) {
-    throw new Error(`failed to fetch sheet ${sheetResponse.body}`);
+    throw new Error(
+      `failed to fetch sheet ${sheetResponse.body}, ${sheetResponse.status}`
+    );
   }
 
   let csv: unknown;

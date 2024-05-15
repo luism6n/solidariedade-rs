@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItems } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PiCaretDownFill } from "react-icons/pi";
 import { twMerge } from "tailwind-merge";
 
@@ -8,42 +8,17 @@ import { Sheet } from "@/types";
 
 function Filters({
   data,
-  setSearchResults,
+  chosenValues,
+  onFilter,
   closeMenu,
+  clearFilters,
 }: {
   data: Sheet;
-  setSearchResults: (filteredData: Sheet) => void;
+  chosenValues: Record<number, any>;
+  onFilter: (columnIndex: number, value: any) => void;
   closeMenu: () => void;
+  clearFilters: () => void;
 }) {
-  const [chosenValues, setChosenValues] = useState<Record<number, any>>({});
-
-  function filterByChoice(colIndex: number, choice: string) {
-    setChosenValues((prev) => ({
-      ...prev,
-      [colIndex]: choice,
-    }));
-  }
-
-  function clearFilters() {
-    setSearchResults(data);
-    setChosenValues({});
-  }
-
-  useEffect(() => {
-    const filteredData: Sheet = {
-      ...data,
-      rows: data.rows.filter((row) => {
-        return row.cells.every(
-          (cell, index) =>
-            chosenValues[index] === undefined ||
-            cell.content === chosenValues[index]
-        );
-      }),
-    };
-
-    setSearchResults(filteredData);
-  }, [chosenValues, data, setSearchResults]);
-
   return (
     <Fieldset className="flex flex-col gap-lg">
       {data.cols.map(
@@ -56,7 +31,7 @@ function Filters({
                 name={col.name}
                 aria-label={col.name}
                 value={chosenValues[col.index] || ""}
-                onChange={(e) => filterByChoice(col.index, e.target.value)}
+                onChange={(e) => onFilter(col.index, e.target.value)}
               >
                 <option value="">Sem filtro</option>
                 {col.choices.map((choice) => (
@@ -91,10 +66,14 @@ function Filters({
 
 export default function FilterDropdown({
   data,
-  setSearchResults,
+  onFilter,
+  chosenValues,
+  clearFilters,
 }: {
   data: Sheet;
-  setSearchResults: (filteredData: Sheet) => void;
+  onFilter: (columnIndex: number, value: any) => void;
+  chosenValues: Record<number, any>;
+  clearFilters: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -120,7 +99,9 @@ export default function FilterDropdown({
             <MenuItems anchor="bottom" className="bg-stone-700 p-lg w-full">
               <Filters
                 data={data}
-                setSearchResults={setSearchResults}
+                onFilter={onFilter}
+                chosenValues={chosenValues}
+                clearFilters={clearFilters}
                 closeMenu={close}
               />
             </MenuItems>
