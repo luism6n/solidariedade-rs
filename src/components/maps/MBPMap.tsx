@@ -1,19 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import BaseMap from "./BaseMap";
 import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
 
 function MBPMap({ data }: { data: { places: Place[] } }) {
-  const onIdle = (map: google.maps.Map) => {
-    setZoom(map.getZoom()!);
-
-    const nextCenter = map.getCenter();
-
-    if (nextCenter) {
-      setCenter(nextCenter.toJSON());
-    }
-  };
-
   const [center, setCenter] = useState({ lat: -30.0346471, lng: -51.2176584 }); // Porto Alegre
   const [zoom, setZoom] = useState(7);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
@@ -21,9 +11,23 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
   const onMarkerClick = useCallback(
     (payload: Place) => {
       // should open a modal or something
-      console.log(selectedPlace);
+      console.log(selectedPlace, payload);
+      setSelectedPlace(payload);
     },
-    [selectedPlace]
+    [selectedPlace, setSelectedPlace]
+  );
+
+  const onIdle = useCallback(
+    (map: google.maps.Map) => {
+      setZoom(map.getZoom()!);
+
+      const nextCenter = map.getCenter();
+
+      if (nextCenter) {
+        setCenter(nextCenter.toJSON());
+      }
+    },
+    [setZoom, setCenter]
   );
 
   const markers: CustomMarkerProps[] = useMemo(() => {
@@ -40,18 +44,21 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
       })) ?? []
     );
   }, [data.places, onMarkerClick]);
-  let map: google.maps.Map;
-  async function initMap(): Promise<void> {
-    const { Map } = (await google.maps.importLibrary(
-      "maps"
-    )) as google.maps.MapsLibrary;
-    map = new Map(document.getElementById("map") as HTMLElement, {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 8,
-    });
-  }
 
-  initMap();
+  useEffect(() => {
+    async function initMap(): Promise<void> {
+      const { Map } = (await google.maps.importLibrary(
+        "maps"
+      )) as google.maps.MapsLibrary;
+
+      new Map(document.getElementById("map") as HTMLElement, {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+      });
+    }
+
+    initMap();
+  }, []);
 
   if (markers.length === 0) {
     return <p>Loading...</p>;
@@ -61,7 +68,7 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
     <>
       <div className="flex relative h-screen">
         <BaseMap
-          className="grow h-full"
+          className="grow"
           center={center}
           zoom={zoom}
           minZoom={2}
