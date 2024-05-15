@@ -134,8 +134,12 @@ export default function Home() {
           const value = chosenValues[index];
           const content = cell.content;
 
-          if (!value || !content || typeof content !== "string") {
+          if (!value) {
             return true;
+          }
+
+          if (!content || typeof content !== "string") {
+            return false;
           }
 
           if (!Array.isArray(value)) {
