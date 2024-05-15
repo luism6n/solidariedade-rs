@@ -117,7 +117,7 @@ async function parseCsvData(googleSheetData: string[][]) {
       }
 
       if (tagsInColumn[c].includes(Tag.LISTA)) {
-        cell.content = content.split(";");
+        cell.content = content.split(";").filter(stringHasContent);
       } else if (typeof content === "string" && stringHasContent(content)) {
         cell.content = content;
       }
