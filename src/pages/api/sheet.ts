@@ -62,24 +62,24 @@ async function parseCsvData(googleSheetData: string[][]) {
     for (const tag of tagList) {
       if (tag === "") continue;
 
-      if (Object.values(Tag).includes(tag as Tag)) {
-        if (tag === Tag.ESCONDIDO) {
-          col.hidden = true;
-        }
-
-        if (tag === Tag.ATUALIZAVEL) {
-          col.hidden = true;
-          timeStampIndices.set(col.name, c);
-        }
-
-        if (tag === Tag.FILTRO_ESCOLHA) {
-          col.choices = [];
-        }
-
-        tagsInColumn[c].push(tag);
-      } else {
+      if (!Object.values(Tag).includes(tag as Tag)) {
         console.warn(`unknown tag "${tag}" in column ${col.name}`);
       }
+
+      if (tag === Tag.ESCONDIDO) {
+        col.hidden = true;
+      }
+
+      if (tag === Tag.ATUALIZAVEL) {
+        col.hidden = true;
+        timeStampIndices.set(col.name, c);
+      }
+
+      if (tag === Tag.FILTRO_ESCOLHA) {
+        col.choices = [];
+      }
+
+      tagsInColumn[c].push(tag);
     }
   }
 
