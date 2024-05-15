@@ -2,9 +2,11 @@ import { Menu, MenuButton, MenuItems } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { PiCaretDownFill } from "react-icons/pi";
 import { twMerge } from "tailwind-merge";
-
+import { Roboto } from "next/font/google";
 import { Field, Fieldset, Label, Select } from "@headlessui/react";
 import { Sheet } from "@/types";
+
+const roboto = Roboto({ subsets: ['latin'], weight: ["400", "500", "700"] });
 
 function Filters({
   data,
@@ -45,20 +47,20 @@ function Filters({
   }, [chosenValues, data, setSearchResults]);
 
   return (
-    <Fieldset className="flex flex-col gap-lg">
+    <Fieldset className={"flex flex-col gap-lg " + roboto.className}>
       {data.cols.map(
         (col) =>
           col.choices && (
             <Field key={`${col.name}-${col.index}`}>
               <Label className="block text-white">{col.name}</Label>
               <Select
-                className="w-full block data-[hover]:shadow data-[focus]:bg-stone-500"
+                className="w-full block rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500"
                 name={col.name}
                 aria-label={col.name}
                 value={chosenValues[col.index] || ""}
                 onChange={(e) => filterByChoice(col.index, e.target.value)}
               >
-                <option value="">Sem filtro</option>
+                <option value="" color="#FFF">Selecionar</option>
                 {col.choices.map((choice) => (
                   <option key={choice} value={choice}>
                     {choice}
@@ -73,13 +75,13 @@ function Filters({
         <button
           type="button"
           onClick={clearFilters}
-          className="uppercase hover:underline"
+          className="uppercase hover:underline text-sm font-medium"
         >
           Limpar Filtros
         </button>
         <button
           type="submit"
-          className="bg-teal-600 p-md rounded-md uppercase hover:underline"
+          className="bg-green p-md rounded-md uppercase hover:underline text-sm font-medium"
           onClick={closeMenu}
         >
           Filtrar
@@ -99,7 +101,7 @@ export default function FilterDropdown({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex w-full justify-center bg-stone-700 text-white p-md">
+    <div className="flex w-full justify-center bg-wine text-white p-md">
       <Menu>
         {({ close }) => (
           <>
@@ -117,7 +119,7 @@ export default function FilterDropdown({
                 />
               </div>
             </MenuButton>
-            <MenuItems anchor="bottom" className="bg-stone-700 p-lg w-full">
+            <MenuItems anchor="bottom" className="bg-wine p-lg w-full">
               <Filters
                 data={data}
                 setSearchResults={setSearchResults}
