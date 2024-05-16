@@ -21,7 +21,7 @@ export function transformPlaceToMarker({
   highlight?: boolean;
 }): google.maps.MarkerOptions {
   return {
-    position: { lat: place?.position.lat || 0, lng: place?.position.lng || 0 },
+    position: { lat: place.position.lat, lng: place.position.lng },
     clickable: true,
     cursor: "pointer",
     draggable: false,

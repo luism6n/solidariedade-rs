@@ -3,6 +3,7 @@
 import Card from "@/components/Card";
 import { type NetworkState } from "@/components/Header";
 import Layout from "@/components/Layout";
+import { Map } from "@/components/Map";
 import { Cell, Col, Row, Sheet } from "@/types";
 import { useEffect, useState } from "react";
 
@@ -163,6 +164,7 @@ export default function Home() {
         </p>
         <p>Região atendida: Porto Alegre, RS</p>
       </div>
+      <Map data={data} />
       {rows.length === 0 ? (
         <p className="text-center">Nenhum resultado encontrado.</p>
       ) : (
