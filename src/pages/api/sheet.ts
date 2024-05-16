@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { getGeocoding } from "@/server/getGeocoding";
 import { Cell, Sheet, Tag } from "@/types";
 import { parse } from "csv-parse/sync";
 import moment from "moment";
@@ -97,6 +98,7 @@ async function parseCsvData(googleSheetData: string[][]) {
     }
   }
 
+  let cellId = 0;
   let numRowsSkipped = 0;
   for (let r = 3; r < googleSheetData.length; r++) {
     const row = googleSheetData[r];
@@ -115,7 +117,7 @@ async function parseCsvData(googleSheetData: string[][]) {
     for (let c = 0; c < row.length; c++) {
       const content = row[c];
 
-      const cell: Cell = { content: null, updatedAt: undefined };
+      const cell: Cell = { id: cellId++, content: null, updatedAt: undefined };
 
       if (typeof content === "undefined") {
         console.warn(
@@ -150,6 +152,12 @@ async function parseCsvData(googleSheetData: string[][]) {
 
       if (tagsInColumn[c].includes(Tag.GOOGLE_MAPS)) {
         cell.googleMaps = true;
+        const { lat, lng } = await getGeocoding(content);
+        if (!lat || !lng) {
+          console.error("failed to get coordinates for", content);
+        }
+        cell.lat = lat;
+        cell.lng = lng;
       }
 
       if (

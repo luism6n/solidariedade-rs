@@ -33,8 +33,11 @@ export interface Row {
 
 // TODO: updatedAt should be an ISO date string
 export type Cell = {
+  id: number;
   content: string[] | string | number | null;
   updatedAt?: string;
   // true when content should become a query in a Google maps link
   googleMaps?: boolean;
+  lat?: number;
+  lng?: number;
 };

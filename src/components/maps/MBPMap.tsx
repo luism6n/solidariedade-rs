@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import BaseMap from "./BaseMap";
 import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
 
-function MBPMap({ data }: { data: { places: Place[] } }) {
+function MBPMap({ places }: { places: Place[] }) {
   const [center, setCenter] = useState({ lat: -30.0346471, lng: -51.2176584 }); // Porto Alegre
-  const [zoom, setZoom] = useState(7);
+  const [zoom, setZoom] = useState(12);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const onMarkerClick = useCallback(
@@ -30,9 +30,23 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
     [setZoom, setCenter]
   );
 
+  const bounds = useMemo(() => {
+    const bounds = new google.maps.LatLngBounds();
+
+    if (!places) {
+      return bounds;
+    }
+
+    for (const place of places) {
+      bounds.extend(place.position);
+    }
+
+    return bounds;
+  }, [places]);
+
   const markers: CustomMarkerProps[] = useMemo(() => {
     return (
-      data.places?.map((place) => ({
+      places.map((place) => ({
         place,
         onClick: onMarkerClick,
         getAnimation: () => null,
@@ -43,22 +57,7 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
         cursor: "pointer",
       })) ?? []
     );
-  }, [data.places, onMarkerClick]);
-
-  useEffect(() => {
-    async function initMap(): Promise<void> {
-      const { Map } = (await google.maps.importLibrary(
-        "maps"
-      )) as google.maps.MapsLibrary;
-
-      new Map(document.getElementById("map") as HTMLElement, {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-      });
-    }
-
-    initMap();
-  }, []);
+  }, [places, onMarkerClick]);
 
   if (markers.length === 0) {
     return <p>Loading...</p>;
@@ -69,10 +68,7 @@ function MBPMap({ data }: { data: { places: Place[] } }) {
       <div className="flex relative h-screen">
         <BaseMap
           className="grow"
-          center={center}
-          zoom={zoom}
-          minZoom={2}
-          maxZoom={18}
+          bounds={bounds}
           onIdle={onIdle}
           fullscreenControl={false}
           streetViewControl={false}
