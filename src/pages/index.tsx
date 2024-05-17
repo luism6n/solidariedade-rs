@@ -2,10 +2,10 @@
 
 import Card from "@/components/Card";
 import Layout from "@/components/Layout";
-import { Col, Row } from "@/types";
 import { useData } from "@/hooks/useData";
-import { PiMapTrifoldFill } from "react-icons/pi";
+import { Col, Row } from "@/types";
 import Link from "next/link";
+import { PiMapTrifoldFill } from "react-icons/pi";
 
 export default function Home() {
   const {

@@ -2,8 +2,8 @@
 import MBPMap from "@/components/maps/MBPMap";
 import { useScript } from "@/hooks/useScript";
 import { Sheet } from "@/types";
-import { Place } from "./maps/mapUtils";
 import { useMemo } from "react";
+import { Place } from "./maps/mapUtils";
 
 export function Map({ data }: { data: Sheet }) {
   const { isLoaded } = useScript({ name: "googleMaps" });
@@ -24,6 +24,10 @@ export function Map({ data }: { data: Sheet }) {
             position: {
               lat: cell.lat,
               lng: cell.lng,
+            },
+            data: {
+              cols: data.cols,
+              row: row,
             },
           });
         }
