@@ -128,6 +128,14 @@ async function parseCsvData(googleSheetData: string[][]) {
 
       if (tagsInColumn[c].includes(Tag.LISTA)) {
         cell.content = content.split(";").filter(stringHasContent);
+
+        for (const item of cell.content) {
+          if (item.length > 40) {
+            console.warn(
+              `unexpected long item in list in cell ${r},${c} with value "${item}", this item will appear ellipsized`
+            );
+          }
+        }
       } else if (typeof content === "string" && stringHasContent(content)) {
         cell.content = content;
       }
