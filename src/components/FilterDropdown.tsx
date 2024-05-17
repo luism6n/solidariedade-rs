@@ -158,10 +158,10 @@ export default function FilterDropdown({
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex w-full justify-center bg-mbp-red-900 text-white p-md">
+    <div className="flex justify-center bg-mbp-red-900 text-white p-md">
       <Menu>
         {({ close }) => (
-          <>
+          <div className="flex flex-col gap-lg">
             <MenuButton
               className="w-full flex justify-center items-center"
               onClick={() => setMenuOpen(!menuOpen)}
@@ -176,7 +176,7 @@ export default function FilterDropdown({
                 />
               </div>
             </MenuButton>
-            <MenuItems anchor="bottom" className="bg-mbp-red-900 p-lg w-full">
+            <MenuItems anchor="bottom" className="w-full bg-mbp-red-900 p-lg">
               <Filters
                 data={data}
                 onFilter={onFilter}
@@ -185,7 +185,7 @@ export default function FilterDropdown({
                 closeMenu={close}
               />
             </MenuItems>
-          </>
+          </div>
         )}
       </Menu>
     </div>
