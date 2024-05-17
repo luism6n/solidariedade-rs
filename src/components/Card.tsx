@@ -14,10 +14,21 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
 
         if (col.hidden) {
           return null;
+        } else if (col.link && typeof content === "string") {
+          return (
+            <div
+              key={`${label}-${i}`}
+              className="underline rounded-md border border-stone-200 p-md flex flex-col gap-md"
+            >
+              <Link href={content} target="_blank" rel="noreferrer">
+                {label}
+              </Link>
+            </div>
+          );
         } else if (Array.isArray(content)) {
           return (
             <div
-              key={i}
+              key={`${label}-${i}`}
               className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
             >
               <p className="font-semibold text-stone-700">{label}</p>
@@ -30,7 +41,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           );
         } else if (label === "Nome") {
           return (
-            <p className="font-bold text-lg" key={i}>
+            <p className="font-bold text-lg" key={`${label}-${i}`}>
               {content}
             </p>
           );
@@ -38,7 +49,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               className="flex gap-sm items-center font-semibold underline text-stone-700"
-              key={i}
+              key={`${label}-${i}`}
             >
               <PiMapPinBold className="text-xl flex-shrink-0" />
               <Link

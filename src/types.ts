@@ -6,6 +6,7 @@ export enum Tag {
   FILTRO_ESCOLHA = "filtro-escolha",
   FILTRO_QUALQUER_ESCOLHIDO = "filtro-qualquer-escolhido",
   FILTRO_TODOS_ESCOLHIDOS = "filtro-todos-escolhidos",
+  LINK = "link",
 }
 
 export interface Sheet {
@@ -21,6 +22,7 @@ export interface Col {
   filterWithOr?: boolean;
   filterWithAnd?: boolean;
   choices?: string[];
+  link?: boolean;
 }
 
 export interface Row {

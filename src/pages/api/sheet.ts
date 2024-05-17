@@ -75,6 +75,10 @@ async function parseCsvData(googleSheetData: string[][]) {
         timeStampIndices.set(col.name, c);
       }
 
+      if (tag === Tag.LINK) {
+        col.link = true;
+      }
+
       if (tag === Tag.FILTRO_QUALQUER_ESCOLHIDO) {
         col.choices = [];
         col.filterWithOr = true;
@@ -165,6 +169,21 @@ async function parseCsvData(googleSheetData: string[][]) {
           console.warn(
             `failed to parse date in cell ${r},${c} with value ${row[timestampIndex]}: ${e}`
           );
+        }
+      }
+
+      if (tagsInColumn[c].includes(Tag.LINK)) {
+        if (!cell.content || typeof cell.content !== "string") {
+          console.warn(
+            `unexpected content type ${typeof cell.content} in cell ${r},${c} with value ${
+              cell.content
+            }`
+          );
+          continue;
+        }
+
+        if (!cell.content.startsWith("http")) {
+          cell.content = `http://${cell.content}`;
         }
       }
 
