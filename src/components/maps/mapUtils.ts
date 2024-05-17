@@ -1,3 +1,4 @@
+import { Col, Row } from "@/types";
 import { createCustomEqual, type State } from "fast-equals";
 import { useEffect, useRef } from "react";
 
@@ -6,6 +7,10 @@ export type Place = {
   id: number;
   name: string;
   position: { lat: number; lng: number };
+  data: {
+    cols: Col[];
+    row: Row;
+  };
 };
 
 type MaybeLatLngLiteral = google.maps.LatLngLiteral | null;

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useCallback } from "react";
-import { twMerge } from "tailwind-merge";
+import { PiMapPinDuotone } from "react-icons/pi";
 import MarkerOverlay from "./MarkerOverlay";
 import { Place } from "./mapUtils";
 
@@ -62,20 +62,8 @@ export default function CustomMarker({
           damping: 20,
         }}
       >
-        <button
-          className={twMerge(
-            "rounded-full aspect-square overflow-hidden ring-2 shadow-lg"
-          )}
-          onClick={handleClick}
-        >
-          <div
-            className={twMerge(
-              "flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md",
-              "border-2 border-mbp-green-500"
-            )}
-          >
-            {place?.name}
-          </div>
+        <button onClick={handleClick}>
+          <PiMapPinDuotone className="text-mbp-red-700 text-xl" />
         </button>
       </motion.div>
     </MarkerOverlay>
