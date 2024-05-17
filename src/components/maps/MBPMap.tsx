@@ -4,8 +4,6 @@ import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
 
 function MBPMap({ places }: { places: Place[] }) {
-  const [center, setCenter] = useState({ lat: -30.0346471, lng: -51.2176584 }); // Porto Alegre
-  const [zoom, setZoom] = useState(12);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const onMarkerClick = useCallback(
@@ -15,19 +13,6 @@ function MBPMap({ places }: { places: Place[] }) {
       setSelectedPlace(payload);
     },
     [selectedPlace, setSelectedPlace]
-  );
-
-  const onIdle = useCallback(
-    (map: google.maps.Map) => {
-      setZoom(map.getZoom()!);
-
-      const nextCenter = map.getCenter();
-
-      if (nextCenter) {
-        setCenter(nextCenter.toJSON());
-      }
-    },
-    [setZoom, setCenter]
   );
 
   const bounds = useMemo(() => {
@@ -65,11 +50,10 @@ function MBPMap({ places }: { places: Place[] }) {
 
   return (
     <>
-      <div className="flex relative h-screen">
+      <div className="flex relative flex-1">
         <BaseMap
           className="grow"
           bounds={bounds}
-          onIdle={onIdle}
           fullscreenControl={false}
           streetViewControl={false}
           mapTypeControl={false}

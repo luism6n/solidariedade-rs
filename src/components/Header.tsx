@@ -28,7 +28,7 @@ export default function Header({
   networkState,
 }: HeaderProps) {
   return (
-    <header className="w-full sticky top-0">
+    <header className="w-full sticky top-0 z-10">
       <div className="p-lg laptop:p-lg bg-mbp-green-700 flex flex-col gap-md laptop:gap-lg">
         <div className="w-full flex justify-between items-end">
           <TitleLogo />
