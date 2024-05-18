@@ -60,13 +60,12 @@ export default function Home() {
         <Cards cols={cols} rows={rows} />
       )}
 
-      {/* floating button at the bottom sayin "Ver Mapa [map icon]" */}
       <Link
-        className=" fixed bottom-4 m-2 flex items-center gap-2 rounded-full bg-gray-700 text-white p-4"
+        className="fixed bottom-8 shadow-md shadow-mbp-dark-gray left-1/2 -translate-x-1/2 flex items-center px-4 py-2 gap-2 rounded-full bg-gray-700 text-white"
         href="/map"
       >
-        <span className="uppercase font-bold  text-lg">Ver Mapa</span>
-        <PiMapTrifoldFill size={24} />
+        <span className="uppercase font-bold text-sm">Ver Mapa</span>
+        <PiMapTrifoldFill size={20} />
       </Link>
     </Layout>
   );
