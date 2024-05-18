@@ -26,7 +26,8 @@ const config: Config = {
         "3xl": "4.25rem", // 68px (42px * 1.618 ≈ 68)
       },
       colors: {
-        "mbp-gray": "#efefef",
+        "mbp-light-gray": "#efefef",
+        "mbp-dark-gray": "#414242",
         "mbp-green": {
           "50": "#eefffb",
           "100": "#c6fff6",

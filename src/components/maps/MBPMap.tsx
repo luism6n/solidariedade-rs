@@ -94,7 +94,7 @@ function MBPMap({ places }: { places: Place[] }) {
         </BaseMap>
         {isCardOpen && selectedPlace && (
           <motion.div
-            className="fixed left-0 right-0 bottom-0 h-1/3 z-20 bg-white"
+            className="fixed left-0 right-0 bottom-0 h-1/3 z-20"
             initial={{
               opacity: 0,
             }}
@@ -131,19 +131,19 @@ function MBPMap({ places }: { places: Place[] }) {
                 top: 0,
                 bottom: 0.5,
               }}
-              className="absolute bottom-0 h-full overflow-hidden w-full"
+              className="absolute bg-white bottom-0 h-full overflow-hidden w-full"
             >
-              <div className="absolute top-0 left-0 right-0 bg-white z-10 p-md">
+              <div className="absolute top-0 left-0 right-0 z-10">
                 <button
-                  className="w-full h-lg cursor-grab touch-none active:cursor-grabbing flex justify-center"
+                  className="bg-white p-md w-full h-lg cursor-grab touch-none active:cursor-grabbing flex justify-center"
                   onPointerDown={(e) => {
                     controls.start(e);
                   }}
                 >
-                  <div className="h-xs w-2xl rounded-full bg-black" />
+                  <div className="h-[5px] w-[64px] rounded-full bg-mbp-dark-gray" />
                 </button>
               </div>
-              <div className="p-md flex flex-col items-center gap-md relative z-0 top-10 h-full overflow-y-scroll">
+              <div className="py-xl p-md flex flex-col items-center gap-md relative z-0 h-full overflow-y-scroll">
                 <Card
                   cols={selectedPlace.item.cols}
                   row={selectedPlace.item.row}

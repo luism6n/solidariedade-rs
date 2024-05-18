@@ -46,7 +46,7 @@ export default function Header({
             onChange={(e) => onSearch(e.target.value)}
           />
           <button type="submit" aria-label="Buscar">
-            <PiMagnifyingGlassBold className="text-2xl text-stone-700" />
+            <PiMagnifyingGlassBold className="text-2xl text-mbp-dark-gray" />
           </button>
         </form>
       </div>
@@ -59,7 +59,7 @@ export default function Header({
       />
 
       {!networkState.online && networkState.lastFetchTime && (
-        <div className="p-sm bg-stone-200">
+        <div className="p-sm bg-200">
           <p className="text-sm text-rose-500">
             Você está offline. Último dado carregado em{" "}
             {networkState.lastFetchTime.toLocaleTimeString()}
