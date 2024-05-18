@@ -89,6 +89,10 @@ async function parseCsvData(googleSheetData: string[][]) {
         col.choices = [];
       }
 
+      if (tag.startsWith(`${Tag.GROUP}:`)) {
+        col.groupName = tag.split(":")[1].trim();
+      }
+
       tagsInColumn[c].push(tag);
     }
   }

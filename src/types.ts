@@ -7,6 +7,7 @@ export enum Tag {
   FILTRO_QUALQUER_ESCOLHIDO = "filtro-qualquer-escolhido",
   FILTRO_TODOS_ESCOLHIDOS = "filtro-todos-escolhidos",
   LINK = "link",
+  GROUP = "grupo",
 }
 
 export interface Sheet {
@@ -23,6 +24,7 @@ export interface Col {
   filterWithAnd?: boolean;
   choices?: string[];
   link?: boolean;
+  groupName?: string;
 }
 
 export interface Row {
