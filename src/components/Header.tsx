@@ -58,6 +58,7 @@ export default function Header({
         clearFilters={clearFilters}
       />
 
+      {/* Show this once online/offline detection works more reliably
       {!networkState.online && networkState.lastFetchTime && (
         <div className="p-sm bg-200">
           <p className="text-sm text-rose-500">
@@ -65,7 +66,7 @@ export default function Header({
             {networkState.lastFetchTime.toLocaleTimeString()}
           </p>
         </div>
-      )}
+      )} */}
     </header>
   );
 }
