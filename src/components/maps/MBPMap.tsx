@@ -145,8 +145,8 @@ function MBPMap({ places }: { places: Place[] }) {
               </div>
               <div className="p-md flex flex-col items-center gap-md relative z-0 top-10 h-full overflow-y-scroll">
                 <Card
-                  cols={selectedPlace.data.cols}
-                  row={selectedPlace.data.row}
+                  cols={selectedPlace.item.cols}
+                  row={selectedPlace.item.row}
                 />
               </div>
             </motion.div>

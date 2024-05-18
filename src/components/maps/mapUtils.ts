@@ -7,7 +7,7 @@ export type Place = {
   id: number;
   name: string;
   position: { lat: number; lng: number };
-  data: {
+  item: {
     cols: Col[];
     row: Row;
   };
