@@ -25,7 +25,7 @@ export function Map({ data }: { data: Sheet }) {
               lat: cell.lat,
               lng: cell.lng,
             },
-            data: {
+            item: {
               cols: data.cols,
               row: row,
             },
