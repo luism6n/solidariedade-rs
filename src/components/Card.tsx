@@ -18,7 +18,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={`${label}-${i}`}
-              className="underline rounded-md border border-stone-200 p-md flex flex-col gap-md"
+              className="underline rounded-md border border-mbp-light-gray p-md flex flex-col gap-md"
             >
               <Link href={content} target="_blank" rel="noreferrer">
                 {label}
@@ -29,9 +29,9 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={`${label}-${i}`}
-              className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
+              className="rounded-md border border-mbp-light-gray p-md flex flex-col gap-md"
             >
-              <p className="font-semibold text-stone-700">{label}</p>
+              <p className="font-semibold text-mbp-dark-gray">{label}</p>
               <div className="flex flex-wrap gap-xs">
                 {content.map((item, i) => (
                   <Pill key={i}>{item}</Pill>
@@ -48,7 +48,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         } else if (googleMaps) {
           return (
             <div
-              className="flex gap-sm items-center font-semibold underline text-stone-700"
+              className="flex gap-sm items-center font-semibold underline text-mbp-dark-gray"
               key={`${label}-${i}`}
             >
               <PiMapPinBold className="text-xl flex-shrink-0" />
@@ -65,14 +65,14 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={i}
-              className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
+              className="rounded-md border border-mbp-light-gray p-md flex flex-col gap-md"
             >
               <div className="flex gap-md">
-                <p className="font-semibold text-stone-700">{label}: </p>
+                <p className="font-semibold text-mbp-dark-gray">{label}: </p>
                 <p>{content}</p>
               </div>
               {updatedAt && (
-                <p className="text-stone-700 text-sm">
+                <p className="text-mbp-dark-gray text-sm">
                   Atualizado em {new Date(updatedAt).toLocaleString()}
                 </p>
               )}

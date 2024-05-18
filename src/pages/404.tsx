@@ -11,7 +11,7 @@ export default function NotFound() {
         <h1 className="text-3xl">Página não encontrada</h1>
         <Link
           href="/"
-          className="underline text-2xl text-center text-stone-700"
+          className="underline text-2xl text-center text-mbp-dark-gray"
         >
           Voltar para a página inicial
         </Link>

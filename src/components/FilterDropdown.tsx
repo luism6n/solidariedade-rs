@@ -70,7 +70,7 @@ function FieldFilter({
           multiple
         >
           <Label className="block text-white">{col.name}</Label>
-          <ListboxButton className="w-full bg-gray-200 flex flex-row- justify-between items-center rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500">
+          <ListboxButton className="w-full bg-mbp-light-gray flex flex-row- justify-between items-center rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500">
             <span>{"Selecionar um ou mais"}</span>
             <PiCaretDownBold />
           </ListboxButton>

@@ -1,6 +1,6 @@
 const twPalette = {
   // change with our color palette
-  "mbp-gray": {
+  "mbp-light-gray": {
     "50": "#f8f8f8",
     "100": "#efefef", // our gray
     "200": "#dcdcdc",
@@ -61,7 +61,7 @@ const style = [
     elementType: "geometry",
     stylers: [
       {
-        color: twPalette["mbp-gray"][50],
+        color: twPalette["mbp-light-gray"][50],
       },
     ],
   },
@@ -69,7 +69,7 @@ const style = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: twPalette["mbp-gray"][500],
+        color: twPalette["mbp-light-gray"][500],
       },
     ],
   },
@@ -77,7 +77,7 @@ const style = [
     elementType: "labels.text.stroke",
     stylers: [
       {
-        color: twPalette["mbp-gray"][100], // todo: change with our color
+        color: twPalette["mbp-light-gray"][100], // todo: change with our color
       },
     ],
   },
@@ -86,7 +86,7 @@ const style = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: twPalette["mbp-gray"][500],
+        color: twPalette["mbp-light-gray"][500],
       },
     ],
   },
@@ -95,7 +95,7 @@ const style = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: twPalette["mbp-gray"][400],
+        color: twPalette["mbp-light-gray"][400],
       },
     ],
   },
@@ -104,7 +104,7 @@ const style = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: twPalette["mbp-gray"][300],
+        color: twPalette["mbp-light-gray"][300],
       },
     ],
   },
@@ -113,7 +113,7 @@ const style = [
     elementType: "geometry.stroke",
     stylers: [
       {
-        color: twPalette["mbp-gray"][200],
+        color: twPalette["mbp-light-gray"][200],
       },
     ],
   },
@@ -122,7 +122,7 @@ const style = [
     elementType: "geometry",
     stylers: [
       {
-        color: twPalette["mbp-gray"][50],
+        color: twPalette["mbp-light-gray"][50],
       },
     ],
   },
@@ -202,7 +202,7 @@ const style = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: twPalette["mbp-gray"][500],
+        color: twPalette["mbp-light-gray"][500],
       },
     ],
   },
@@ -238,7 +238,7 @@ const style = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: twPalette["mbp-gray"][700],
+        color: twPalette["mbp-light-gray"][700],
       },
     ],
   },
@@ -301,7 +301,7 @@ const style = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: twPalette["mbp-gray"][600], // Primary 100
+        color: twPalette["mbp-light-gray"][600], // Primary 100
       },
     ],
   },
