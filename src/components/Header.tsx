@@ -28,14 +28,14 @@ export default function Header({
   networkState,
 }: HeaderProps) {
   return (
-    <header className="w-full sticky top-0 z-10">
-      <div className="p-lg laptop:p-lg bg-mbp-green-700 flex flex-col gap-md laptop:gap-lg">
-        <div className="w-full flex justify-between items-end">
+    <header className="sticky top-0 z-10 w-full">
+      <div className="flex flex-col gap-md bg-mbp-green-700 p-lg laptop:gap-lg laptop:p-lg">
+        <div className="flex w-full items-end justify-between">
           <TitleLogo />
           <PiInfo className="text-4xl" color="white" />
         </div>
         <form
-          className="bg-white flex gap-md rounded-md p-md items-center"
+          className="flex items-center gap-md rounded-md bg-white p-md"
           onSubmit={(e) => e.preventDefault()}
         >
           <input

@@ -8,7 +8,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   const renderedCols: Record<number, boolean> = {};
 
   return (
-    <div className="bg-white p-md flex flex-col gap-lg rounded-md border-card">
+    <div className="border-card flex flex-col gap-lg rounded-md bg-white p-md">
       {cols.map((col, i) => {
         let indicesInGroup: number[] = [];
 
@@ -27,7 +27,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         }
 
         indicesInGroup = indicesInGroup.filter(
-          (index) => row.cells[index].content
+          (index) => row.cells[index].content,
         );
 
         if (indicesInGroup.length === 0) {
@@ -42,7 +42,7 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
           return (
             <div
               key={`${col.name}-${i}`}
-              className="rounded-md border border-stone-200 p-md flex flex-col gap-md"
+              className="flex flex-col gap-md rounded-md border border-stone-200 p-md"
             >
               {renderedCells}
             </div>
@@ -76,10 +76,10 @@ function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
             <Pill key={i}>{item}</Pill>
           ))}
         </div>
-      </div>
+      </div>,
     );
   } else if (col.name === "Nome") {
-    return <p className="font-bold text-lg">{content}</p>;
+    return <p className="text-lg font-bold">{content}</p>;
   } else if (col.link && typeof content === "string") {
     elements.push(
       <Link
@@ -89,12 +89,12 @@ function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
         rel="noreferrer"
       >
         {label}
-      </Link>
+      </Link>,
     );
   } else if (googleMaps) {
     elements.push(
-      <div className="flex gap-sm items-center font-semibold underline text-stone-700">
-        <PiMapPinBold className="text-xl flex-shrink-0" />
+      <div className="flex items-center gap-sm font-semibold text-stone-700 underline">
+        <PiMapPinBold className="flex-shrink-0 text-xl" />
         <Link
           href={`https://www.google.com/maps/search/?api=1&query=${content}`}
           target="_blank"
@@ -102,22 +102,22 @@ function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
         >
           {content}
         </Link>
-      </div>
+      </div>,
     );
   } else if (content && typeof content === "string") {
     elements.push(
       <div className="flex gap-md">
         <p className="font-semibold text-stone-700">{label}: </p>
         <p>{content}</p>
-      </div>
+      </div>,
     );
   }
 
   if (updatedAt) {
     elements.push(
-      <p className="text-stone-700 text-sm">
+      <p className="text-sm text-stone-700">
         Atualizado em {new Date(updatedAt).toLocaleString()}
-      </p>
+      </p>,
     );
   }
 

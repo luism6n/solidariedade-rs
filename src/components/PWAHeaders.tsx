@@ -8,16 +8,10 @@ export const PWAHeaders = () => {
 
   return (
     <>
-      <meta
-        name="application-name"
-        content={name}
-      />
+      <meta name="application-name" content={name} />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      <meta
-        name="apple-mobile-web-app-title"
-        content={name}
-      />
+      <meta name="apple-mobile-web-app-title" content={name} />
       <meta name="format-detection" content="telephone=no" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="msapplication-TileColor" content="#2B5797" />
@@ -30,42 +24,18 @@ export const PWAHeaders = () => {
       <link rel="manifest" href="/manifest.json" />
       <link rel="shortcut icon" href="/favicon.ico" />
 
-      <meta
-        name="twitter:card"
-        content={description}
-      />
+      <meta name="twitter:card" content={description} />
       <meta name="twitter:url" content={url} />
-      <meta
-        name="twitter:title"
-        content={name}
-      />
-      <meta
-        name="twitter:description"
-        content={description}
-      />
-      <meta
-        name="twitter:image"
-        content={icon}
-      />
+      <meta name="twitter:title" content={name} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={icon} />
       <meta name="twitter:creator" content="@luism6n" />
       <meta property="og:type" content="website" />
-      <meta
-        property="og:title"
-        content={name}
-      />
-      <meta
-        property="og:description"
-        content={description}
-      />
-      <meta
-        property="og:site_name"
-        content={name}
-      />
+      <meta property="og:title" content={name} />
+      <meta property="og:description" content={description} />
+      <meta property="og:site_name" content={name} />
       <meta property="og:url" content={url} />
-      <meta
-        property="og:image"
-        content={icon}
-      />
+      <meta property="og:image" content={icon} />
     </>
   );
 };

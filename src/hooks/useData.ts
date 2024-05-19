@@ -19,7 +19,7 @@ export function useData() {
     (value: string) => {
       setSearchQuery(value);
     },
-    [setSearchQuery]
+    [setSearchQuery],
   );
 
   const handleFilter = useCallback(
@@ -29,7 +29,7 @@ export function useData() {
         [colIndex]: choice,
       }));
     },
-    [setChosenValues]
+    [setChosenValues],
   );
 
   const handleClear = useCallback(() => {
@@ -55,7 +55,7 @@ export function useData() {
       if (!res.ok) {
         console.error(
           `failed to fetch sheet ${res.status} ${res.statusText}:`,
-          res
+          res,
         );
         setError(`${res.status} ${res.statusText}`);
         return;
@@ -105,7 +105,7 @@ export function useData() {
         ...filteredData,
         rows: filteredData.rows.filter((row) => {
           return row?.cells.some((cell) =>
-            normalizeCellForComparison(cell.content).includes(normalizedQuery)
+            normalizeCellForComparison(cell.content).includes(normalizedQuery),
           );
         }),
       };
@@ -172,7 +172,7 @@ function normalizeCellForComparison(content: Cell["content"]) {
 function mostRecentRowFirst(a: Row, b: Row) {
   function rowLastUpdatedAt(row: Row) {
     return Math.max(
-      ...row.cells.map((cell) => new Date(cell.updatedAt || 0).getTime())
+      ...row.cells.map((cell) => new Date(cell.updatedAt || 0).getTime()),
     );
   }
 

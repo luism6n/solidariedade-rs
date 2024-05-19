@@ -44,7 +44,7 @@ function FieldFilter({
       <Field>
         <Label className="block text-white">{col.name}</Label>
         <Select
-          className="w-full block rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500"
+          className="block w-full rounded p-2 data-[focus]:bg-stone-500 data-[hover]:shadow"
           name={col.name}
           aria-label={col.name}
           value={chosenValues[col.index] || ""}
@@ -70,16 +70,16 @@ function FieldFilter({
           multiple
         >
           <Label className="block text-white">{col.name}</Label>
-          <ListboxButton className="w-full bg-mbp-light-gray flex flex-row- justify-between items-center rounded p-2 data-[hover]:shadow data-[focus]:bg-stone-500">
+          <ListboxButton className="flex-row- flex w-full items-center justify-between rounded bg-mbp-light-gray p-2 data-[focus]:bg-stone-500 data-[hover]:shadow">
             <span>{"Selecionar um ou mais"}</span>
             <PiCaretDownBold />
           </ListboxButton>
-          <ListboxOptions className="bg-mbp-red-900 p-md w-full">
+          <ListboxOptions className="w-full bg-mbp-red-900 p-md">
             {col.choices.sort().map((choice) => (
               <ListboxOption
                 key={choice}
                 value={choice}
-                className="flex flex-row gap-x-1 items-center cursor-pointer group-data-[focus]:bg-stone-500 px-2 bg-white text-black"
+                className="flex cursor-pointer flex-row items-center gap-x-1 bg-white px-2 text-black group-data-[focus]:bg-stone-500"
               >
                 {({ focus, selected }) => (
                   <>
@@ -124,20 +124,20 @@ function Filters({
         />
       ))}
 
-      <Field className="flex justify-between items-center text-white">
+      <Field className="flex items-center justify-between text-white">
         <button
           type="button"
           onClick={() => {
             clearFilters();
             closeMenu();
           }}
-          className="uppercase hover:underline text-sm font-medium"
+          className="text-sm font-medium uppercase hover:underline"
         >
           Limpar Filtros
         </button>
         <button
           type="submit"
-          className="bg-mbp-green-700 p-md rounded-md uppercase hover:underline text-sm font-medium"
+          className="rounded-md bg-mbp-green-700 p-md text-sm font-medium uppercase hover:underline"
           onClick={closeMenu}
         >
           Filtrar
@@ -159,20 +159,20 @@ export default function FilterDropdown({
   clearFilters: () => void;
 }) {
   return (
-    <div className="flex justify-center bg-mbp-red-900 text-white p-md">
+    <div className="flex justify-center bg-mbp-red-900 p-md text-white">
       <Menu>
         {({ close, open }) => (
           <div className="flex flex-col gap-lg">
             <MenuButton
-              className="w-full flex justify-center items-center"
+              className="flex w-full items-center justify-center"
               onClick={close}
             >
-              <div className="flex gap-md items-center">
+              <div className="flex items-center gap-md">
                 <p>Filtros de busca</p>
                 <PiCaretDownFill
                   className={twMerge(
                     open && "rotate-180",
-                    "transition-all ease-in-out"
+                    "transition-all ease-in-out",
                   )}
                 />
               </div>

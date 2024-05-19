@@ -5,7 +5,7 @@ const cacheDir = process.env.NODE_ENV === "production" ? "/cache" : ".cache";
 const cache = flatCache.load("geocoding", cacheDir);
 
 export async function getGeocoding(
-  address: string
+  address: string,
 ): Promise<{ lat?: number; lng?: number }> {
   const cached = await cache.getKey(address);
   if (cached) {
@@ -15,7 +15,7 @@ export async function getGeocoding(
   }
 
   const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-    address
+    address,
   )}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`;
 
   try {
@@ -32,7 +32,7 @@ export async function getGeocoding(
       // entries
       cache.save(true);
       console.log(
-        `address cached: latitude: ${latitude}, longitude: ${longitude}`
+        `address cached: latitude: ${latitude}, longitude: ${longitude}`,
       );
 
       return { lat: latitude, lng: longitude };

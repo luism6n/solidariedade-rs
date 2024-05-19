@@ -26,7 +26,7 @@ const deepCompareEqualsForMaps = createCustomEqual({
     return (
       a: google.maps.LatLngLiteral,
       b: google.maps.LatLngLiteral,
-      meta: State<undefined>
+      meta: State<undefined>,
     ) => {
       if (isLatLngLiteral(a) || isLatLngLiteral(b)) {
         return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
@@ -38,7 +38,7 @@ const deepCompareEqualsForMaps = createCustomEqual({
 
 export function useDeepCompareEffectForMaps(
   callback: React.EffectCallback,
-  dependencies: unknown[]
+  dependencies: unknown[],
 ) {
   const deepDependencies = dependencies.map(useDeepCompareMemorize);
   // eslint-disable-next-line react-hooks/exhaustive-deps

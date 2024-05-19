@@ -63,7 +63,7 @@ export default function CustomMarker({
         }}
       >
         <button onClick={handleClick}>
-          <PiMapPinDuotone className="text-mbp-red-700 text-xl" />
+          <PiMapPinDuotone className="text-xl text-mbp-red-700" />
         </button>
       </motion.div>
     </MarkerOverlay>

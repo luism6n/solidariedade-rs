@@ -10,9 +10,9 @@ export default function Layout({
   };
 }) {
   return (
-    <div className="flex flex-col h-screen bg-mbp-light-gray">
+    <div className="flex h-screen flex-col bg-mbp-light-gray">
       <Header {...props.headerProps} />
-      <div className="bg-mbp-light-gray p-lg flex flex-col gap-md flex-1">
+      <div className="flex flex-1 flex-col gap-md bg-mbp-light-gray p-lg">
         {children}
       </div>
     </div>

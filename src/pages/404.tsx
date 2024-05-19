@@ -3,15 +3,15 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col h-screen items-center justify-between">
-      <div className="w-full bg-rose-700 p-lg flex items-center justify-center">
+    <div className="flex h-screen flex-col items-center justify-between">
+      <div className="flex w-full items-center justify-center bg-rose-700 p-lg">
         <TitleLogo />
       </div>
-      <div className="flex gap-lg flex-col flex-1 justify-center items-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-lg">
         <h1 className="text-3xl">Página não encontrada</h1>
         <Link
           href="/"
-          className="underline text-2xl text-center text-mbp-dark-gray"
+          className="text-center text-2xl text-mbp-dark-gray underline"
         >
           Voltar para a página inicial
         </Link>

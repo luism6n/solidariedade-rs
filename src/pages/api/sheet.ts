@@ -10,7 +10,7 @@ type Data = Sheet;
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data>,
 ) {
   let googleSheetData;
   try {
@@ -53,7 +53,7 @@ async function parseCsvData(googleSheetData: string[][]) {
       console.warn(
         `unexpected data type in tag column: ${typeof tagsString} in column ${
           col.name
-        }`
+        }`,
       );
       continue;
     }
@@ -107,7 +107,7 @@ async function parseCsvData(googleSheetData: string[][]) {
     // remove empty rows (rows with all null content or just the ID column)
     if (
       row.every(
-        (cell, i) => !stringHasContent(cell) || data.cols[i].name === "ID"
+        (cell, i) => !stringHasContent(cell) || data.cols[i].name === "ID",
       )
     ) {
       numRowsSkipped++;
@@ -121,7 +121,7 @@ async function parseCsvData(googleSheetData: string[][]) {
 
       if (typeof content === "undefined") {
         console.warn(
-          `unexpected undefined type ${typeof content} in cell ${r},${c} with value ${content}`
+          `unexpected undefined type ${typeof content} in cell ${r},${c} with value ${content}`,
         );
         cells.push(cell);
         continue;
@@ -138,7 +138,7 @@ async function parseCsvData(googleSheetData: string[][]) {
         for (const item of cell.content) {
           if (item.length > 40) {
             console.warn(
-              `unexpected long item in list in cell ${r},${c} with value "${item}", this item will appear ellipsized`
+              `unexpected long item in list in cell ${r},${c} with value "${item}", this item will appear ellipsized`,
             );
           }
         }
@@ -168,7 +168,7 @@ async function parseCsvData(googleSheetData: string[][]) {
         const choices = data.cols[c].choices;
         if (!choices) {
           console.error(
-            `unexpected missing choices in column ${data.cols[c].name}`
+            `unexpected missing choices in column ${data.cols[c].name}`,
           );
         } else if (!choices.includes(content)) {
           choices.push(content);
@@ -188,7 +188,7 @@ async function parseCsvData(googleSheetData: string[][]) {
         } catch (e) {
           if (row[timestampIndex] !== "") {
             console.warn(
-              `failed to parse date in cell ${r},${c} with value ${row[timestampIndex]}: ${e}`
+              `failed to parse date in cell ${r},${c} with value ${row[timestampIndex]}: ${e}`,
             );
           }
         }
@@ -199,7 +199,7 @@ async function parseCsvData(googleSheetData: string[][]) {
           console.warn(
             `unexpected content type ${typeof cell.content} in cell ${r},${c} with value ${
               cell.content
-            }`
+            }`,
           );
           continue;
         }
@@ -223,12 +223,12 @@ async function parseCsvData(googleSheetData: string[][]) {
 async function getGoogleSheetData() {
   const sheetResponse = await fetch(
     `https://docs.google.com/spreadsheets/d/${process.env.NEXT_PUBLIC_SHEET_ID}/export?format=csv&gid=${process.env.NEXT_PUBLIC_SHEET_GID}`,
-    { redirect: "follow" }
+    { redirect: "follow" },
   );
 
   if (sheetResponse.status !== 200 || !sheetResponse.body) {
     throw new Error(
-      `failed to fetch sheet ${sheetResponse.body}, ${sheetResponse.status}`
+      `failed to fetch sheet ${sheetResponse.body}, ${sheetResponse.status}`,
     );
   }
 
