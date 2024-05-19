@@ -1,5 +1,8 @@
-import Layout from "@/components/Layout";
+import { BackButton } from "@/components/BackButton";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { Header } from "@/components/Header";
 import { Map } from "@/components/Map";
+import { SearchBar } from "@/components/SearchBar";
 import { useData } from "@/hooks/useData";
 
 export default function MapPage() {
@@ -7,7 +10,6 @@ export default function MapPage() {
     data,
     error,
     searchResults,
-    networkState,
     searchQuery,
     chosenValues,
     handleSearch,
@@ -19,29 +21,28 @@ export default function MapPage() {
     return <p>{error}</p>;
   }
 
-  if (!data) {
-    if (networkState.online) {
-      return <p>Carregando...</p>;
-    } else {
-      return <p>Você está offline e sem dados anteriores.</p>;
-    }
+  if (data === null) {
+    return <p>Nenhum dado encontrado.</p>;
+  } else if (data === undefined) {
+    return <p>Carregando...</p>;
   }
 
   return (
-    <Layout
-      props={{
-        headerProps: {
-          data,
-          onSearch: handleSearch,
-          onFilter: handleFilter,
-          chosenValues: chosenValues,
-          clearFilters: handleClear,
-          searchQuery: searchQuery,
-          networkState: networkState,
-        },
-      }}
-    >
+    <div className="flex h-screen flex-col bg-mbp-light-gray">
+      <Header>
+        <BackButton />
+
+        <SearchBar searchQuery={searchQuery} onSearch={handleSearch} />
+
+        <FilterDropdown
+          data={data}
+          onFilter={handleFilter}
+          chosenValues={chosenValues}
+          clearFilters={handleClear}
+        />
+      </Header>
+
       <Map data={searchResults || data} />
-    </Layout>
+    </div>
   );
 }

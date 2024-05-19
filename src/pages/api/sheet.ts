@@ -6,13 +6,16 @@ import moment from "moment";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
-type Data = Sheet;
+type Data = Sheet | null;
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
   let googleSheetData;
+  // get rowId from request param
+  const rowId = req.query.rowId as string | undefined;
+
   try {
     googleSheetData = await getGoogleSheetData();
   } catch (e) {
@@ -22,6 +25,19 @@ export default async function handler(
   }
 
   const data = await parseCsvData(googleSheetData);
+
+  if (rowId) {
+    const idIndex = data.cols.findIndex((col) => col.name === "ID");
+
+    const row = data.rows.find((r) => r.cells[idIndex].content === rowId);
+
+    if (!row) {
+      res.status(404).send(null);
+      return;
+    }
+
+    data.rows = [row];
+  }
 
   res.send(data);
 }

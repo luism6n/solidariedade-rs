@@ -149,7 +149,7 @@ function Filters({
   );
 }
 
-export default function FilterDropdown({
+export function FilterDropdown({
   data,
   onFilter,
   chosenValues,

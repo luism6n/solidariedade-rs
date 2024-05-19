@@ -9,6 +9,7 @@ export enum Tag {
   LINK = "link",
   GROUP = "grupo",
   VERIFIED = "verificado",
+  MAIN_INFO = "feed",
 }
 
 export interface Sheet {
@@ -42,4 +43,7 @@ export type Cell = {
   googleMaps?: boolean;
   lat?: number;
   lng?: number;
+
+  // true if info should be shown in main page
+  mainInfo?: boolean;
 };

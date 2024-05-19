@@ -5,10 +5,11 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { useCallback, useMemo, useState } from "react";
-import Card from "../Card";
 import BaseMap from "./BaseMap";
 import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
+import { CardContent } from "@/components/CardContent";
+import { Card } from "@/components/Card";
 
 function MBPMap({ places }: { places: Place[] }) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
@@ -142,10 +143,12 @@ function MBPMap({ places }: { places: Place[] }) {
                 </button>
               </div>
               <div className="relative z-0 flex h-full flex-col items-center gap-md overflow-y-scroll p-md py-xl">
-                <Card
-                  cols={selectedPlace.item.cols}
-                  row={selectedPlace.item.row}
-                />
+                <Card>
+                  <CardContent
+                    cols={selectedPlace.item.cols}
+                    row={selectedPlace.item.row}
+                  />
+                </Card>
               </div>
             </motion.div>
           </motion.div>

@@ -1,4 +1,4 @@
-import TitleLogo from "@/components/TitleLogo";
+import { TitleLogo } from "@/components/TitleLogo";
 import Link from "next/link";
 
 export default function NotFound() {

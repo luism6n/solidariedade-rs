@@ -1,15 +1,10 @@
-import { NetworkState } from "@/components/Header";
 import { Cell, Row, Sheet } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 
-export function useData() {
-  const [data, setData] = useState<Sheet | null>(null);
+export function useData(rowId?: string) {
+  const [data, setData] = useState<Sheet | null | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<Sheet | null>(null);
-  const [networkState, setNetworkState] = useState<NetworkState>({
-    online: true,
-    lastFetchTime: null,
-  });
   const [searchQuery, setSearchQuery] = useState("");
 
   // column index -> chosen values
@@ -45,12 +40,10 @@ export function useData() {
 
       const fetchTime = new Date();
       try {
-        res = await fetch("/api/sheet");
+        const url = `/api/sheet${rowId ? `?rowId=${rowId}` : ""}`;
+        res = await fetch(url);
       } catch (error: unknown) {
-        setNetworkState((ns) => ({
-          ...ns,
-          online: false,
-        }));
+        console.error("failed to fetch sheet:", error);
         return;
       }
 
@@ -61,21 +54,6 @@ export function useData() {
         );
         setError(`${res.status} ${res.statusText}`);
         return;
-      }
-
-      // if the Date header is older than the fetch time, we're offline and the
-      // service worker is serving a cached response
-      const responseTime = new Date(res.headers.get("Date") || "");
-      if (responseTime < fetchTime) {
-        setNetworkState({
-          online: false,
-          lastFetchTime: responseTime,
-        });
-      } else {
-        setNetworkState({
-          online: true,
-          lastFetchTime: responseTime,
-        });
       }
 
       let sheetData: Sheet;
@@ -93,7 +71,7 @@ export function useData() {
     };
 
     fetchData();
-  }, []);
+  }, [rowId]);
 
   useEffect(() => {
     if (!data) return;
@@ -158,7 +136,6 @@ export function useData() {
     data,
     error,
     searchResults,
-    networkState,
     searchQuery,
     chosenValues,
     handleSearch,
