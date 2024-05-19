@@ -10,15 +10,11 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-/* source for this absolute madness:
-   https://github.com/tailwindlabs/headlessui/issues/762 */
-html {
-  padding-right: 0 !important;
-  overflow-y: scroll !important;
-}
-
 body {
   color: rgb(var(--foreground-rgb));
+
+  /* https://github.com/tailwindlabs/headlessui/issues/762 */
+  position: relative;
 }
 
 @layer utilities {
