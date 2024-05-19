@@ -3,9 +3,12 @@ import Link from "next/link";
 import { PiMapPinBold } from "react-icons/pi";
 import Pill from "./Pill";
 import { Fragment } from "react";
+import { FaHeartCircleCheck } from "react-icons/fa6";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   const renderedCols: Record<number, boolean> = {};
+  const { verified } = row;
 
   return (
     <div className="border-card flex flex-col gap-lg rounded-md bg-white p-md">
@@ -35,7 +38,12 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
         }
 
         const renderedCells = indicesInGroup.map((index) => (
-          <RenderCell key={index} cell={row.cells[index]} col={cols[index]} />
+          <RenderCell
+            key={index}
+            cell={row.cells[index]}
+            col={cols[index]}
+            verified={verified}
+          />
         ));
 
         if (hasBorder(cols, row, indicesInGroup)) {
@@ -48,14 +56,26 @@ export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
             </div>
           );
         } else {
-          return renderedCells;
+          return (
+            <div key={`${col.name}-${i}`} className="px-md">
+              {renderedCells}
+            </div>
+          );
         }
       })}
     </div>
   );
 }
 
-function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
+function RenderCell({
+  cell,
+  col,
+  verified,
+}: {
+  cell: Cell;
+  col: Col;
+  verified: boolean;
+}) {
   const { content, updatedAt, googleMaps } = cell;
   const label = col.name;
 
@@ -79,7 +99,21 @@ function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
       </div>,
     );
   } else if (col.name === "Nome") {
-    return <p className="text-lg font-bold">{content}</p>;
+    elements.push(
+      <div className="flex gap-4">
+        <p className="text-2xl font-bold">{content}</p>
+        {verified && (
+          <Popover className="relative flex items-center">
+            <PopoverButton>
+              <FaHeartCircleCheck className="text-2xl text-mbp-red-800" />
+            </PopoverButton>
+            <PopoverPanel className="absolute left-1/2 top-2 -translate-x-1/2 translate-y-full rounded-md border bg-white px-md shadow">
+              <p className="font-semibold text-stone-700">Verificado</p>
+            </PopoverPanel>
+          </Popover>
+        )}
+      </div>,
+    );
   } else if (col.link && typeof content === "string") {
     elements.push(
       <Link

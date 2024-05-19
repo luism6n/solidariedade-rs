@@ -8,6 +8,7 @@ export enum Tag {
   FILTRO_TODOS_ESCOLHIDOS = "filtro-todos-escolhidos",
   LINK = "link",
   GROUP = "grupo",
+  VERIFIED = "verificado",
 }
 
 export interface Sheet {
@@ -28,6 +29,7 @@ export interface Col {
 }
 
 export interface Row {
+  verified: boolean;
   cells: Cell[];
 }
 

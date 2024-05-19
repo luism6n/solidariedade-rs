@@ -103,6 +103,7 @@ async function parseCsvData(googleSheetData: string[][]) {
   for (let r = 3; r < googleSheetData.length; r++) {
     const row = googleSheetData[r];
     const cells: Cell[] = [];
+    let verified = false;
 
     // remove empty rows (rows with all null content or just the ID column)
     if (
@@ -229,10 +230,14 @@ async function parseCsvData(googleSheetData: string[][]) {
         }
       }
 
+      if (tagsInColumn[c].includes(Tag.VERIFIED) && isVerified(content)) {
+        verified = true;
+      }
+
       cells.push(cell);
     }
 
-    data.rows.push({ cells });
+    data.rows.push({ cells, verified });
   }
 
   console.info("skipped", numRowsSkipped, "empty rows");
@@ -290,4 +295,8 @@ function stringHasContent(str: string): boolean {
   chars.delete(",");
 
   return chars.size > 0;
+}
+
+function isVerified(content: string): boolean {
+  return content.toLowerCase().trim() === "sim";
 }
