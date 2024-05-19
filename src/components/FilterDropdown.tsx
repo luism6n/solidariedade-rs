@@ -35,7 +35,7 @@ function FieldFilter({
 }: {
   col: Col;
   chosenValues: Record<number, any>;
-  onFilter: (columnIndex: number, value: any) => void;
+  onFilter: (columnIndex: number, values: string[]) => void;
 }) {
   if (!col.choices) return null;
 
@@ -48,7 +48,9 @@ function FieldFilter({
           name={col.name}
           aria-label={col.name}
           value={chosenValues[col.index] || ""}
-          onChange={(e) => onFilter(col.index, e.target.value)}
+          onChange={(e) =>
+            onFilter(col.index, e.target.value ? [e.target.value] : [])
+          }
         >
           <option value="" color="#FFF">
             Selecionar
@@ -66,7 +68,7 @@ function FieldFilter({
       <Field>
         <Listbox
           value={chosenValues[col.index]}
-          onChange={(value) => onFilter(col.index, value)}
+          onChange={(values: string[]) => onFilter(col.index, values)}
           multiple
         >
           <Label className="block text-white">{col.name}</Label>
@@ -109,7 +111,7 @@ function Filters({
 }: {
   data: Sheet;
   chosenValues: Record<number, any>;
-  onFilter: (columnIndex: number, value: any) => void;
+  onFilter: (columnIndex: number, values: string[]) => void;
   closeMenu: () => void;
   clearFilters: () => void;
 }) {
@@ -154,7 +156,7 @@ export default function FilterDropdown({
   clearFilters,
 }: {
   data: Sheet;
-  onFilter: (columnIndex: number, value: any) => void;
+  onFilter: (columnIndex: number, values: string[]) => void;
   chosenValues: Record<number, any>;
   clearFilters: () => void;
 }) {

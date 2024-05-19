@@ -11,9 +11,11 @@ export function useData() {
     lastFetchTime: null,
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [chosenValues, setChosenValues] = useState<
-    Record<number, Cell["content"]>
-  >({});
+
+  // column index -> chosen values
+  const [chosenValues, setChosenValues] = useState<Record<number, string[]>>(
+    {},
+  );
 
   const handleSearch = useCallback(
     (value: string) => {
@@ -23,10 +25,10 @@ export function useData() {
   );
 
   const handleFilter = useCallback(
-    (colIndex: number, choice: string) => {
+    (colIndex: number, choices: string[]) => {
       setChosenValues((prev) => ({
         ...prev,
-        [colIndex]: choice,
+        [colIndex]: choices,
       }));
     },
     [setChosenValues],
@@ -120,25 +122,30 @@ export function useData() {
             return true;
           }
 
-          const value = chosenValues[index];
-          const content = cell.content;
+          const values = chosenValues[index];
+          const cellContent = cell.content;
 
-          if (!value) {
+          if (!values || values.length === 0) {
             return true;
           }
 
-          if (!content || typeof content !== "string") {
+          if (!cellContent || typeof cellContent === "number") {
             return false;
           }
 
-          if (!Array.isArray(value)) {
-            return content === value;
+          let contentArray: string[] = [];
+          if (!Array.isArray(cellContent)) {
+            contentArray = [cellContent];
           } else {
-            if (data.cols[index].filterWithOr) {
-              return value.includes(content);
-            } else if (data.cols[index].filterWithAnd) {
-              return value.every((value: string) => content === value);
-            }
+            contentArray = cellContent;
+          }
+
+          if (data.cols[index].filterWithAnd) {
+            return values.every((value: string) =>
+              contentArray.includes(value),
+            );
+          } else {
+            return values.some((value: string) => contentArray.includes(value));
           }
         });
       }),

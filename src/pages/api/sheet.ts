@@ -166,12 +166,32 @@ async function parseCsvData(googleSheetData: string[][]) {
         tagsInColumn[c].includes(Tag.FILTRO_TODOS_ESCOLHIDOS)
       ) {
         const choices = data.cols[c].choices;
+
         if (!choices) {
           console.error(
             `unexpected missing choices in column ${data.cols[c].name}`,
           );
-        } else if (!choices.includes(content)) {
-          choices.push(content);
+        } else {
+          let newChoices: string[];
+
+          if (Array.isArray(cell.content)) {
+            newChoices = cell.content;
+          } else if (typeof cell.content === "string") {
+            newChoices = [cell.content];
+          } else {
+            console.warn(
+              `non-string content in cell ${r},${c} with value ${cell.content} used in filter, this will be ignored`,
+            );
+            newChoices = [];
+          }
+
+          for (const choice of newChoices) {
+            if (choices.includes(choice)) {
+              continue;
+            }
+
+            choices.push(choice);
+          }
         }
       }
 

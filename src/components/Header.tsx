@@ -12,7 +12,7 @@ interface HeaderProps {
   data: Sheet;
   searchQuery: string;
   onSearch: (query: string) => void;
-  onFilter: (columnIndex: number, value: any) => void;
+  onFilter: (columnIndex: number, values: string[]) => void;
   chosenValues: Record<number, any>;
   clearFilters: () => void;
   networkState: NetworkState;
