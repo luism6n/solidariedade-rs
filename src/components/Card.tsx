@@ -2,6 +2,7 @@ import { Cell, Col, Row } from "@/types";
 import Link from "next/link";
 import { PiMapPinBold } from "react-icons/pi";
 import Pill from "./Pill";
+import { Fragment } from "react";
 
 export default function Card({ cols, row }: { cols: Col[]; row: Row }) {
   const renderedCols: Record<number, boolean> = {};
@@ -120,7 +121,7 @@ function RenderCell({ cell, col }: { cell: Cell; col: Col }) {
     );
   }
 
-  return elements;
+  return elements.map((e, i) => <Fragment key={i}>{e}</Fragment>);
 }
 
 function hasBorder(cols: Col[], row: Row, indices: number[]) {
