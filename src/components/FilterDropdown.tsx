@@ -11,9 +11,9 @@ import {
   MenuButton,
   MenuItems,
   Select,
+  Transition,
 } from "@headlessui/react";
 import { Roboto } from "next/font/google";
-import { useState } from "react";
 import {
   PiCaretDownBold,
   PiCaretDownFill,
@@ -127,7 +127,10 @@ function Filters({
       <Field className="flex justify-between items-center text-white">
         <button
           type="button"
-          onClick={clearFilters}
+          onClick={() => {
+            clearFilters();
+            closeMenu();
+          }}
           className="uppercase hover:underline text-sm font-medium"
         >
           Limpar Filtros
@@ -155,36 +158,48 @@ export default function FilterDropdown({
   chosenValues: Record<number, any>;
   clearFilters: () => void;
 }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <div className="flex justify-center bg-mbp-red-900 text-white p-md">
       <Menu>
-        {({ close }) => (
+        {({ close, open }) => (
           <div className="flex flex-col gap-lg">
             <MenuButton
               className="w-full flex justify-center items-center"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={close}
             >
               <div className="flex gap-md items-center">
                 <p>Filtros de busca</p>
                 <PiCaretDownFill
                   className={twMerge(
-                    menuOpen && "rotate-180",
+                    open && "rotate-180",
                     "transition-all ease-in-out"
                   )}
                 />
               </div>
             </MenuButton>
-            <MenuItems anchor="bottom" className="w-full bg-mbp-red-900 p-lg">
-              <Filters
-                data={data}
-                onFilter={onFilter}
-                chosenValues={chosenValues}
-                clearFilters={clearFilters}
-                closeMenu={close}
-              />
-            </MenuItems>
+            <Transition
+              show={open}
+              enter="transition-transform duration-500 ease-in-out"
+              enterFrom="transform -translate-y-full"
+              enterTo="transform translate-y-0"
+              leave="transition-transform duration-500 ease-in-out"
+              leaveFrom="transform translate-y-0"
+              leaveTo="transform -translate-y-full"
+            >
+              <MenuItems
+                anchor="bottom"
+                // transition when entering and leaving
+                className={`w-full bg-mbp-red-900 p-lg`}
+              >
+                <Filters
+                  data={data}
+                  onFilter={onFilter}
+                  chosenValues={chosenValues}
+                  clearFilters={clearFilters}
+                  closeMenu={close}
+                />
+              </MenuItems>
+            </Transition>
           </div>
         )}
       </Menu>
