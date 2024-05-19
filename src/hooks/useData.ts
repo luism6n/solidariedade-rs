@@ -1,5 +1,5 @@
 import { NetworkState } from "@/components/Header";
-import { Cell, Sheet } from "@/types";
+import { Cell, Row, Sheet } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 
 export function useData() {
@@ -85,6 +85,8 @@ export function useData() {
         return;
       }
 
+      sheetData.rows.sort(mostRecentRowFirst);
+
       setData(sheetData);
     };
 
@@ -165,4 +167,14 @@ function normalizeCellForComparison(content: Cell["content"]) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
+}
+
+function mostRecentRowFirst(a: Row, b: Row) {
+  function rowLastUpdatedAt(row: Row) {
+    return Math.max(
+      ...row.cells.map((cell) => new Date(cell.updatedAt || 0).getTime())
+    );
+  }
+
+  return rowLastUpdatedAt(b) - rowLastUpdatedAt(a);
 }
