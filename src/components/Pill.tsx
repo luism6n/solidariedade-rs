@@ -1,6 +1,19 @@
-export function Pill({ children }: { children: React.ReactNode }) {
+import { twMerge } from "tailwind-merge";
+
+export function Pill({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="truncate rounded-full bg-mbp-green-700 p-sm px-md text-sm text-white">
+    <div
+      className={twMerge(
+        "truncate rounded-full bg-mbp-green-700 p-sm px-md text-sm text-white",
+        className,
+      )}
+    >
       {children}
     </div>
   );

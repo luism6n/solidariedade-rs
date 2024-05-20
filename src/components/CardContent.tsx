@@ -5,6 +5,7 @@ import { FaHeartCircleCheck } from "react-icons/fa6";
 import Link from "next/link";
 import { PiMapPinBold } from "react-icons/pi";
 import { Fragment } from "react";
+import { twMerge } from "tailwind-merge";
 
 export function CardContent({ cols, row }: { cols: Col[]; row: Row }) {
   const renderedCols: Record<number, boolean> = {};
@@ -46,22 +47,23 @@ export function CardContent({ cols, row }: { cols: Col[]; row: Row }) {
           />
         ));
 
+        let className = twMerge(
+          "flex flex-col gap-md p-md",
+          getClassIfSpecialValues(
+            col,
+            indicesInGroup.map((i) => row.cells[i].content),
+          ),
+        );
+
         if (hasBorder(cols, row, indicesInGroup)) {
-          return (
-            <div
-              key={`${col.name}-${i}`}
-              className="flex flex-col gap-md rounded-md border border-stone-200 p-md"
-            >
-              {renderedCells}
-            </div>
-          );
-        } else {
-          return (
-            <div key={`${col.name}-${i}`} className="px-md">
-              {renderedCells}
-            </div>
-          );
+          className = twMerge(className, "rounded-md border border-stone-200");
         }
+
+        return (
+          <div key={`${col.name}-${i}`} className={className}>
+            {renderedCells}
+          </div>
+        );
       })}
     </>
   );
@@ -92,8 +94,10 @@ function RenderCell({
       <div className="flex flex-col gap-md">
         <p className="font-semibold text-stone-700">{label}: </p>
         <div className="flex flex-wrap gap-xs">
-          {content.map((item, i) => (
-            <Pill key={i}>{item}</Pill>
+          {content.map((value, i) => (
+            <Pill className={getClassIfSpecialValues(col, [value])} key={i}>
+              {value}
+            </Pill>
           ))}
         </div>
       </div>,
@@ -178,4 +182,23 @@ function hasBorder(cols: Col[], row: Row, indices: number[]) {
   }
 
   return true;
+}
+
+function getClassIfSpecialValues(col: Col, values: Cell["content"][]) {
+  for (const value of values) {
+    if (Array.isArray(value)) {
+      // this is a list, so it must be taken care in RenderCell
+      return "";
+    }
+
+    if (col.goodValue && value === col.goodValue) {
+      return "text-black bg-green-100";
+    }
+
+    if (col.warnValue && value === col.warnValue) {
+      return "text-black bg-red-100";
+    }
+  }
+
+  return "";
 }

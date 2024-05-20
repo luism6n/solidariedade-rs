@@ -110,6 +110,14 @@ async function parseCsvData(googleSheetData: string[][]) {
         col.groupName = tag.split(":")[1].trim();
       }
 
+      if (tag.startsWith(`${Tag.VERDE}:`)) {
+        col.goodValue = tag.split(":")[1].trim();
+      }
+
+      if (tag.startsWith(`${Tag.VERMELHO}:`)) {
+        col.warnValue = tag.split(":")[1].trim();
+      }
+
       tagsInColumn[c].push(tag);
     }
   }
@@ -150,7 +158,10 @@ async function parseCsvData(googleSheetData: string[][]) {
       }
 
       if (tagsInColumn[c].includes(Tag.LISTA)) {
-        cell.content = content.split(";").filter(stringHasContent);
+        cell.content = content
+          .split(";")
+          .filter(stringHasContent)
+          .map((s) => s.trim());
 
         for (const item of cell.content) {
           if (item.length > 40) {
@@ -160,7 +171,7 @@ async function parseCsvData(googleSheetData: string[][]) {
           }
         }
       } else if (typeof content === "string" && stringHasContent(content)) {
-        cell.content = content;
+        cell.content = content.trim();
       }
 
       if (typeof content === "number") {

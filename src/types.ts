@@ -10,6 +10,8 @@ export enum Tag {
   GROUP = "grupo",
   VERIFIED = "verificado",
   MAIN_INFO = "feed",
+  VERMELHO = "vermelho",
+  VERDE = "verde",
 }
 
 export interface Sheet {
@@ -27,6 +29,8 @@ export interface Col {
   choices?: string[];
   link?: boolean;
   groupName?: string;
+  warnValue?: string;
+  goodValue?: string;
 }
 
 export interface Row {
