@@ -15,9 +15,11 @@ import { twMerge } from "tailwind-merge";
 function MBPMap({
   places,
   className,
+  popupCard = true,
 }: {
   places: Place[];
   className?: string;
+  popupCard?: boolean;
 }) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -28,12 +30,16 @@ function MBPMap({
 
   const onMarkerClick = useCallback(
     (payload: Place) => {
+      if (!popupCard) {
+        return;
+      }
+
       // should open a modal or something
       console.log(selectedPlace, payload);
       setSelectedPlace(payload);
       setIsCardOpen(true);
     },
-    [selectedPlace, setSelectedPlace],
+    [selectedPlace, setSelectedPlace, popupCard],
   );
 
   const yStart = typeof y.get() === "number" ? y.get() : 0;

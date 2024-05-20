@@ -42,7 +42,7 @@ function Item({ rowId }: { rowId: string }) {
         <BackButton />
       </Header>
 
-      <Map className="min-h-64" data={data} />
+      <Map className="min-h-64" data={data} popupCard={false} />
 
       <div className="relative z-10">
         <Card>

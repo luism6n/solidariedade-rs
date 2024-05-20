@@ -5,7 +5,15 @@ import { Sheet } from "@/types";
 import { useMemo } from "react";
 import { Place } from "./maps/mapUtils";
 
-export function Map({ data, className }: { data: Sheet; className?: string }) {
+export function Map({
+  data,
+  className,
+  popupCard,
+}: {
+  data: Sheet;
+  className?: string;
+  popupCard?: boolean;
+}) {
   const { isLoaded } = useScript({ name: "googleMaps" });
 
   const places = useMemo(() => {
@@ -41,5 +49,5 @@ export function Map({ data, className }: { data: Sheet; className?: string }) {
     return <p>Carregando...</p>;
   }
 
-  return <MBPMap className={className} places={places} />;
+  return <MBPMap className={className} places={places} popupCard={popupCard} />;
 }

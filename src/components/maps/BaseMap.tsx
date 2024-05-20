@@ -65,7 +65,7 @@ export default function BaseMap({
       return;
     }
 
-    map.setOptions({ maxZoom: 18 });
+    map.setOptions({ maxZoom: 15 });
     map.fitBounds(bounds);
     map.setOptions({ maxZoom: undefined });
   }, [map, bounds]);
