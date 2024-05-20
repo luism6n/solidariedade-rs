@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function TitleLogo() {
@@ -6,9 +7,14 @@ export function TitleLogo() {
       href="/"
       className="font-extrabold uppercase text-white desktop:text-xl"
     >
-      <img
+      <Image
         src="/logo.png"
-        alt={process.env.NEXT_PUBLIC_SITE_NAME}
+        alt={
+          process.env.NEXT_PUBLIC_SITE_NAME ||
+          "Logotipo da Campanha Popular da Solidariedade"
+        }
+        width={272}
+        height={117}
         aria-description={process.env.NEXT_PUBLIC_SITE_DESC}
       />
     </Link>
