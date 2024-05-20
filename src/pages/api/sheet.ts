@@ -234,7 +234,7 @@ async function parseCsvData(googleSheetData: string[][]) {
           const updatedAt = parseDate(row[timestampIndex]);
           cell.updatedAt = updatedAt.toISOString();
         } catch (e) {
-          if (row[timestampIndex] !== "") {
+          if (row[timestampIndex].trim() !== "") {
             console.warn(
               `failed to parse date in cell ${r},${c} with value ${row[timestampIndex]}: ${e}`,
             );
