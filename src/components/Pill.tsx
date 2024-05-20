@@ -10,7 +10,7 @@ export function Pill({
   return (
     <div
       className={twMerge(
-        "truncate rounded-full bg-mbp-green-700 p-sm px-md text-sm text-white",
+        "max-w-52 truncate rounded-full bg-mbp-green-700 p-sm px-md text-sm text-white",
         className,
       )}
     >
