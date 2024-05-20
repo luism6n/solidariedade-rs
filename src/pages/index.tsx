@@ -5,9 +5,12 @@ import { CardContent } from "@/components/CardContent";
 import { FilterDropdown } from "@/components/FilterDropdown";
 import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
+import ShareButton from "@/components/ShareButton";
 import { useData } from "@/hooks/useData";
 import { Col, Row } from "@/types";
-import { getRowId } from "@/utils/rowId";
+import { getRowId } from "@/utils/rows";
+import { getRowName } from "@/utils/rows";
+import { getUrlTo } from "@/utils/windowLocation";
 import Link from "next/link";
 import { PiMapTrifoldFill } from "react-icons/pi";
 
@@ -79,11 +82,17 @@ function Cards({ cols, rows }: { cols: Col[]; rows: Row[] }) {
         <Card key={i}>
           <CardContent cols={cols} row={row} />
           <Link
-            className="flex justify-center rounded-md border border-mbp-green-700 p-2"
+            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
             href={`/places/${getRowId(row, cols)}`}
           >
             <span className="text-xl text-mbp-green-700">Mais informações</span>
           </Link>
+          <ShareButton
+            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
+            // share this site url with path /places/:id
+            url={getUrlTo(`places/${getRowId(row, cols)}`)}
+            title={getRowName(row, cols)}
+          />
         </Card>
       ))}
     </div>

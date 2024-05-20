@@ -5,7 +5,10 @@ import { Card } from "@/components/Card";
 import { CardContent } from "@/components/CardContent";
 import { Header } from "@/components/Header";
 import { Map } from "@/components/Map";
+import ShareButton from "@/components/ShareButton";
 import { useData } from "@/hooks/useData";
+import { getRowId, getRowName } from "@/utils/rows";
+import { getUrlTo } from "@/utils/windowLocation";
 import { useRouter } from "next/router";
 
 export default function ItemPage() {
@@ -30,6 +33,9 @@ function Item({ rowId }: { rowId: string }) {
     return <div>Carregando...</div>;
   }
 
+  const row = data.rows[0];
+  const cols = data.cols;
+
   return (
     <>
       <Header>
@@ -40,7 +46,13 @@ function Item({ rowId }: { rowId: string }) {
 
       <div className="relative z-10">
         <Card>
-          <CardContent cols={data.cols} row={data.rows[0]} />
+          <CardContent cols={cols} row={row} />
+
+          <ShareButton
+            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
+            url={getUrlTo(`places/${getRowId(row, cols)}`)}
+            title={getRowName(row, cols)}
+          />
         </Card>
       </div>
     </>
