@@ -3,7 +3,7 @@ import { TitleLogo } from "./TitleLogo";
 
 export function Header({ children }: { children?: React.ReactNode }) {
   return (
-    <header className="sticky top-0 z-10 w-full">
+    <header className="sticky top-0 z-50 w-full">
       <div className="flex flex-col gap-md bg-mbp-green-700 p-lg laptop:gap-lg laptop:p-lg">
         <div className="flex w-full items-end justify-between">
           <TitleLogo />

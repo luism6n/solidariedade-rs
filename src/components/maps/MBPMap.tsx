@@ -10,8 +10,15 @@ import CustomMarker, { CustomMarkerProps } from "./CustomMarker";
 import { Place } from "./mapUtils";
 import { CardContent } from "@/components/CardContent";
 import { Card } from "@/components/Card";
+import { twMerge } from "tailwind-merge";
 
-function MBPMap({ places }: { places: Place[] }) {
+function MBPMap({
+  places,
+  className,
+}: {
+  places: Place[];
+  className?: string;
+}) {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [isCardOpen, setIsCardOpen] = useState(false);
 
@@ -76,85 +83,83 @@ function MBPMap({ places }: { places: Place[] }) {
   }
 
   return (
-    <>
-      <div className="relative flex flex-1">
-        <BaseMap
-          className="grow"
-          bounds={bounds}
-          fullscreenControl={false}
-          streetViewControl={false}
-          mapTypeControl={false}
-          zoomControl={false}
-          clickableIcons={false}
+    <div className="relative flex flex-1">
+      <BaseMap
+        className={twMerge("grow", className)}
+        bounds={bounds}
+        fullscreenControl={false}
+        streetViewControl={false}
+        mapTypeControl={false}
+        zoomControl={false}
+        clickableIcons={false}
+      >
+        {markers
+          ?.filter((m) => m.position?.lat && m.position.lng)
+          .map((marker, i) => <CustomMarker key={i} {...marker} />)}
+      </BaseMap>
+      {isCardOpen && selectedPlace && (
+        <motion.div
+          className="fixed bottom-0 left-0 right-0 z-20 h-1/3"
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          onClick={closeCard}
+          ref={scope}
         >
-          {markers
-            ?.filter((m) => m.position?.lat && m.position.lng)
-            .map((marker, i) => <CustomMarker key={i} {...marker} />)}
-        </BaseMap>
-        {isCardOpen && selectedPlace && (
           <motion.div
-            className="fixed bottom-0 left-0 right-0 z-20 h-1/3"
+            id="drawer"
+            onClick={(e) => e.stopPropagation()}
+            style={{ y }}
             initial={{
-              opacity: 0,
+              y: "100%",
             }}
             animate={{
-              opacity: 1,
+              y: "0%",
             }}
-            onClick={closeCard}
-            ref={scope}
+            transition={{ ease: "easeInOut" }}
+            drag="y"
+            onDragEnd={() => {
+              if (y.get() > 100) {
+                closeCard();
+              }
+            }}
+            dragControls={controls}
+            dragListener={false}
+            dragConstraints={{
+              top: 0,
+              bottom: 0,
+            }}
+            dragElastic={{
+              top: 0,
+              bottom: 0.5,
+            }}
+            className="absolute bottom-0 h-full w-full overflow-hidden bg-white"
           >
-            <motion.div
-              id="drawer"
-              onClick={(e) => e.stopPropagation()}
-              style={{ y }}
-              initial={{
-                y: "100%",
-              }}
-              animate={{
-                y: "0%",
-              }}
-              transition={{ ease: "easeInOut" }}
-              drag="y"
-              onDragEnd={() => {
-                if (y.get() > 100) {
-                  closeCard();
-                }
-              }}
-              dragControls={controls}
-              dragListener={false}
-              dragConstraints={{
-                top: 0,
-                bottom: 0,
-              }}
-              dragElastic={{
-                top: 0,
-                bottom: 0.5,
-              }}
-              className="absolute bottom-0 h-full w-full overflow-hidden bg-white"
-            >
-              <div className="absolute left-0 right-0 top-0 z-10">
-                <button
-                  className="flex h-lg w-full cursor-grab touch-none justify-center bg-white p-md active:cursor-grabbing"
-                  onPointerDown={(e) => {
-                    controls.start(e);
-                  }}
-                >
-                  <div className="h-[5px] w-[64px] rounded-full bg-mbp-dark-gray" />
-                </button>
-              </div>
-              <div className="relative z-0 flex h-full flex-col items-center gap-md overflow-y-scroll p-md py-xl">
-                <Card>
-                  <CardContent
-                    cols={selectedPlace.item.cols}
-                    row={selectedPlace.item.row}
-                  />
-                </Card>
-              </div>
-            </motion.div>
+            <div className="absolute left-0 right-0 top-0 z-10">
+              <button
+                className="flex h-lg w-full cursor-grab touch-none justify-center bg-white p-md active:cursor-grabbing"
+                onPointerDown={(e) => {
+                  controls.start(e);
+                }}
+              >
+                <div className="h-[5px] w-[64px] rounded-full bg-mbp-dark-gray" />
+              </button>
+            </div>
+            <div className="relative z-0 flex h-full flex-col items-center gap-md overflow-y-scroll p-md py-xl">
+              <Card>
+                <CardContent
+                  cols={selectedPlace.item.cols}
+                  row={selectedPlace.item.row}
+                />
+              </Card>
+            </div>
           </motion.div>
-        )}
-      </div>
-    </>
+        </motion.div>
+      )}
+    </div>
   );
 }
 

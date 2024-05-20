@@ -4,6 +4,7 @@ import { BackButton } from "@/components/BackButton";
 import { Card } from "@/components/Card";
 import { CardContent } from "@/components/CardContent";
 import { Header } from "@/components/Header";
+import { Map } from "@/components/Map";
 import { useData } from "@/hooks/useData";
 import { useRouter } from "next/router";
 
@@ -34,9 +35,14 @@ function Item({ rowId }: { rowId: string }) {
       <Header>
         <BackButton />
       </Header>
-      <Card>
-        <CardContent cols={data.cols} row={data.rows[0]} />
-      </Card>
+
+      <Map className="min-h-64" data={data} />
+
+      <div className="relative z-10">
+        <Card>
+          <CardContent cols={data.cols} row={data.rows[0]} />
+        </Card>
+      </div>
     </>
   );
 }

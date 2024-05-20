@@ -5,7 +5,7 @@ import { Sheet } from "@/types";
 import { useMemo } from "react";
 import { Place } from "./maps/mapUtils";
 
-export function Map({ data }: { data: Sheet }) {
+export function Map({ data, className }: { data: Sheet; className?: string }) {
   const { isLoaded } = useScript({ name: "googleMaps" });
 
   const places = useMemo(() => {
@@ -41,5 +41,5 @@ export function Map({ data }: { data: Sheet }) {
     return <p>Carregando...</p>;
   }
 
-  return <MBPMap places={places} />;
+  return <MBPMap className={className} places={places} />;
 }
