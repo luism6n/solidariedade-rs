@@ -9,7 +9,7 @@ export enum Tag {
   LINK = "link",
   GROUP = "grupo",
   VERIFIED = "verificado",
-  MAIN_INFO = "feed",
+  MAIN_INFO = "principal",
   VERMELHO = "vermelho",
   VERDE = "verde",
   TITLE = "titulo",
@@ -35,6 +35,7 @@ export interface Col {
   goodValue?: string;
   title?: boolean;
   valuesOnly?: boolean;
+  mainInfo?: boolean;
 }
 
 export interface Row {

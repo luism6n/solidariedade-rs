@@ -80,7 +80,7 @@ function Cards({ cols, rows }: { cols: Col[]; rows: Row[] }) {
     <div className="grid grid-cols-1 gap-lg laptop:grid-cols-2 desktop:grid-cols-3">
       {rows.map((row, i) => (
         <Card key={i}>
-          <CardContent cols={cols} row={row} />
+          <CardContent cols={cols} row={row} renderAllInfo={false} />
           <Link
             className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
             href={`/places/${getRowId(row, cols)}`}

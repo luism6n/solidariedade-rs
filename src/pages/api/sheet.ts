@@ -126,6 +126,10 @@ async function parseCsvData(googleSheetData: string[][]) {
         col.valuesOnly = true;
       }
 
+      if (tag === Tag.MAIN_INFO) {
+        col.mainInfo = true;
+      }
+
       tagsInColumn[c].push(tag);
     }
   }

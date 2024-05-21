@@ -7,23 +7,37 @@ import { PiMapPinBold } from "react-icons/pi";
 import { Fragment } from "react";
 import { twMerge } from "tailwind-merge";
 
-export function CardContent({ cols, row }: { cols: Col[]; row: Row }) {
+export function CardContent({
+  cols,
+  row,
+  // renderAllInfo = false means only cols with col.mainInfo === true will be
+  // rendered
+  renderAllInfo = true,
+}: {
+  cols: Col[];
+  row: Row;
+  renderAllInfo?: boolean;
+}) {
   const renderedCols: Record<number, boolean> = {};
-  const { verified } = row;
 
   return (
     <>
       {cols.map((col, i) => {
         let indicesInGroup: number[] = [];
 
-        if (col.hidden || col.index in renderedCols) {
-          return null;
-        } else if (col.groupName) {
+        if (col.groupName) {
           indicesInGroup = cols
-            .filter((c) => c.groupName === col.groupName && !c.hidden)
+            .filter(
+              (c) =>
+                c.groupName === col.groupName &&
+                shouldRenderCol(c, renderedCols, renderAllInfo),
+            )
             .map((c) => c.index);
-        } else {
+        } else if (shouldRenderCol(col, renderedCols, renderAllInfo)) {
           indicesInGroup = [i];
+        } else {
+          renderedCols[i] = true;
+          return null;
         }
 
         for (const index of indicesInGroup) {
@@ -43,7 +57,7 @@ export function CardContent({ cols, row }: { cols: Col[]; row: Row }) {
             key={index}
             cell={row.cells[index]}
             col={cols[index]}
-            verified={verified}
+            verified={row.verified}
           />
         ));
 
@@ -202,4 +216,14 @@ function getClassIfSpecialValues(col: Col, values: Cell["content"][]) {
   }
 
   return "";
+}
+
+function shouldRenderCol(
+  col: Col,
+  renderedCols: Record<number, boolean>,
+  renderAllInfo?: boolean,
+) {
+  return (
+    !col.hidden && (col.mainInfo || renderAllInfo) && !renderedCols[col.index]
+  );
 }
