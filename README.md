@@ -1,19 +1,23 @@
-# Site da Campanha Popular de Solidariedade do Rio Grande do Sul
+# App da Campanha Popular de Solidariedade do Rio Grande do Sul
+
+Endereço: [solidariedade-rs.org](https://solidariedade-rs.org).
+
+## About the code
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+### Getting Started
 
 We're using [asdf](https://asdf-vm.com/guide/getting-started.html) to manage our node version. If you don't use asdf, you can install the node version specified in `.tool-versions` manually.
 
-## Local deployment
+### Local deployment
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Production deployment
+### Production deployment
 
 ```bash
 npm install --omit=dev
@@ -21,7 +25,7 @@ npm run build
 npm start
 ```
 
-## General info
+### General info
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
