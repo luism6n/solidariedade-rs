@@ -47,19 +47,25 @@ export default function BaseMap({
         styles: style,
       });
 
-      // if more than one child, center and set zoom, else fit bounds
-      // source: https://stackoverflow.com/a/3267775
-      if (Children.count(children) <= 1) {
-        googleMap.setCenter(bounds.getCenter());
-        googleMap.setZoom(15);
-      } else {
-        googleMap.fitBounds(bounds);
-      }
-
       setMap(googleMap);
     },
-    [map, options, bounds, children],
+    [map, options],
   );
+
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    // if more than one child, center and set zoom, else fit bounds
+    // source: https://stackoverflow.com/a/3267775
+    if (Children.count(children) <= 1) {
+      map.setCenter(bounds.getCenter());
+      map.setZoom(15);
+    } else {
+      map.fitBounds(bounds);
+    }
+  }, [map, bounds, children]);
 
   useDeepCompareEffectForMaps(() => {
     if (!map) {
