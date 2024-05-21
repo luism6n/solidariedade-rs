@@ -80,6 +80,7 @@ function RenderCell({
 }) {
   const { content, updatedAt, googleMaps } = cell;
   const label = col.name;
+  const showLabel = !col.valuesOnly;
 
   if (!content) return null;
 
@@ -92,7 +93,7 @@ function RenderCell({
   if (Array.isArray(content)) {
     elements.push(
       <div className="flex flex-col gap-md">
-        <p className="font-semibold text-stone-700">{label}: </p>
+        {showLabel && <p className="font-semibold text-stone-700">{label}: </p>}
         <div className="flex flex-wrap gap-xs">
           {content.map((value, i) => (
             <Pill className={getClassIfSpecialValues(col, [value])} key={i}>
@@ -145,7 +146,7 @@ function RenderCell({
   } else if (content && typeof content === "string") {
     elements.push(
       <div className="flex gap-md">
-        <p className="font-semibold text-stone-700">{label}: </p>
+        {showLabel && <p className="font-semibold text-stone-700">{label}: </p>}
         <p>{content}</p>
       </div>,
     );

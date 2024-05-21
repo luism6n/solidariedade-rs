@@ -13,6 +13,7 @@ export enum Tag {
   VERMELHO = "vermelho",
   VERDE = "verde",
   TITLE = "titulo",
+  VALUES_ONLY = "somente-valores",
 }
 
 export interface Sheet {
@@ -33,6 +34,7 @@ export interface Col {
   warnValue?: string;
   goodValue?: string;
   title?: boolean;
+  valuesOnly?: boolean;
 }
 
 export interface Row {
