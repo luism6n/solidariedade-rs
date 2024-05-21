@@ -3,8 +3,8 @@ import {
   Children,
   cloneElement,
   isValidElement,
+  useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import style from "./mapStyle";
@@ -16,10 +16,10 @@ interface ChildProps {
 
 export interface MapProps extends google.maps.MapOptions {
   className: string;
+  bounds: google.maps.LatLngBounds;
   onClick?: (e: google.maps.MapMouseEvent) => void;
   onIdle?: (map: google.maps.Map) => void;
   children?: ReactElement<ChildProps>[] | ReactElement<ChildProps>;
-  bounds?: google.maps.LatLngBounds;
 }
 
 export default function BaseMap({
@@ -30,26 +30,43 @@ export default function BaseMap({
   children,
   ...options
 }: MapProps) {
-  const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
 
-  useEffect(() => {
-    if (!ref.current || map !== undefined) {
-      return;
-    }
+  const createMap = useCallback(
+    async (current: HTMLElement | null) => {
+      if (!current || map !== undefined) {
+        return;
+      }
 
-    const googleMap = new window.google.maps.Map(ref.current, {
-      styles: style,
-    });
-    setMap(googleMap);
-  }, [ref, map]);
+      const { Map } = (await google.maps.importLibrary(
+        "maps",
+      )) as typeof google.maps;
+
+      const googleMap = new Map(current, {
+        ...options,
+        styles: style,
+      });
+
+      // if more than one child, center and set zoom, else fit bounds
+      // source: https://stackoverflow.com/a/3267775
+      if (Children.count(children) <= 1) {
+        googleMap.setCenter(bounds.getCenter());
+        googleMap.setZoom(15);
+      } else {
+        googleMap.fitBounds(bounds);
+      }
+
+      setMap(googleMap);
+    },
+    [map, options, bounds, children],
+  );
 
   useDeepCompareEffectForMaps(() => {
     if (!map) {
       return;
     }
 
-    map.setOptions(options);
+    map.setOptions({ ...options, styles: style });
   }, [map, options]);
 
   useEffect(() => {
@@ -58,21 +75,16 @@ export default function BaseMap({
     }
 
     map.addListener("click", onClick);
-  }, [map, onClick, onIdle]);
-
-  useEffect(() => {
-    if (!map || !bounds) {
-      return;
-    }
-
-    map.setOptions({ maxZoom: 15 });
-    map.fitBounds(bounds);
-    map.setOptions({ maxZoom: undefined });
-  }, [map, bounds]);
+  }, [map, onClick]);
 
   return (
     <>
-      <div ref={ref} className={className} />
+      <div
+        ref={(current) => {
+          createMap(current);
+        }}
+        className={className}
+      />
       {Children.map(children, (child) => {
         if (isValidElement<ChildProps>(child)) {
           return cloneElement(child, { map });

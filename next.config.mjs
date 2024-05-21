@@ -157,7 +157,7 @@ const withPWA = nextPWA({
         if (pathname.startsWith("/api/")) return true;
         return false;
       },
-      handler: "NetworkFirst",
+      handler: "StaleWhileRevalidate",
       method: "GET",
       options: {
         cacheName: "apis",
@@ -165,7 +165,6 @@ const withPWA = nextPWA({
           maxEntries: 16,
           maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
         },
-        networkTimeoutSeconds: 5, // fall back to cache if api does not response within 5 seconds
       },
     },
 

@@ -8,7 +8,10 @@ export function BackButton() {
 
   return (
     <div className="w-full bg-mbp-green-700 p-lg text-white">
-      <button className="flex items-center gap-2" onClick={() => router.back()}>
+      <button
+        className="flex items-center gap-2"
+        onClick={() => router.push("/")}
+      >
         <FaArrowLeftLong />
         <span>Voltar</span>
       </button>

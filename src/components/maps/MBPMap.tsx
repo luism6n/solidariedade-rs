@@ -98,6 +98,7 @@ function MBPMap({
         mapTypeControl={false}
         zoomControl={false}
         clickableIcons={false}
+        gestureHandling={"greedy"}
       >
         {markers
           ?.filter((m) => m.position?.lat && m.position.lng)
