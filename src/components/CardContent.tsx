@@ -102,7 +102,7 @@ function RenderCell({
         </div>
       </div>,
     );
-  } else if (col.name === "Nome") {
+  } else if (col.title) {
     elements.push(
       <div className="flex gap-4">
         <p className="text-2xl font-bold">{content}</p>
@@ -169,7 +169,7 @@ function hasBorder(cols: Col[], row: Row, indices: number[]) {
 
   const index = indices[0];
 
-  if (cols[index].name === "Nome") {
+  if (cols[index].title) {
     return false;
   }
 

@@ -118,6 +118,10 @@ async function parseCsvData(googleSheetData: string[][]) {
         col.warnValue = tag.split(":")[1].trim();
       }
 
+      if (tag === Tag.TITLE) {
+        col.title = true;
+      }
+
       tagsInColumn[c].push(tag);
     }
   }

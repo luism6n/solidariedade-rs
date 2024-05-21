@@ -12,6 +12,7 @@ export enum Tag {
   MAIN_INFO = "feed",
   VERMELHO = "vermelho",
   VERDE = "verde",
+  TITLE = "titulo",
 }
 
 export interface Sheet {
@@ -31,6 +32,7 @@ export interface Col {
   groupName?: string;
   warnValue?: string;
   goodValue?: string;
+  title?: boolean;
 }
 
 export interface Row {

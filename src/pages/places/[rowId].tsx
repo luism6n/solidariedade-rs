@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 import { Map } from "@/components/Map";
 import ShareButton from "@/components/ShareButton";
 import { useData } from "@/hooks/useData";
-import { getRowId, getRowName } from "@/utils/rows";
+import { getRowId, getRowTitle } from "@/utils/rows";
 import { getUrlTo } from "@/utils/windowLocation";
 import { useRouter } from "next/router";
 
@@ -51,7 +51,7 @@ function Item({ rowId }: { rowId: string }) {
           <ShareButton
             className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
             url={getUrlTo(`places/${getRowId(row, cols)}`)}
-            title={getRowName(row, cols)}
+            title={getRowTitle(row, cols)}
           />
         </Card>
       </div>

@@ -9,7 +9,7 @@ import ShareButton from "@/components/ShareButton";
 import { useData } from "@/hooks/useData";
 import { Col, Row } from "@/types";
 import { getRowId } from "@/utils/rows";
-import { getRowName } from "@/utils/rows";
+import { getRowTitle } from "@/utils/rows";
 import { getUrlTo } from "@/utils/windowLocation";
 import Link from "next/link";
 import { PiMapTrifoldFill } from "react-icons/pi";
@@ -91,7 +91,7 @@ function Cards({ cols, rows }: { cols: Col[]; rows: Row[] }) {
             className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
             // share this site url with path /places/:id
             url={getUrlTo(`places/${getRowId(row, cols)}`)}
-            title={getRowName(row, cols)}
+            title={getRowTitle(row, cols)}
           />
         </Card>
       ))}

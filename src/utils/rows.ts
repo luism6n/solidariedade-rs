@@ -5,8 +5,12 @@ export function getRowId(row: Row, cols: Col[]) {
   return row.cells[idIndex].content;
 }
 
-export function getRowName(row: Row, cols: Col[]) {
-  const nameIndex = cols.findIndex((col) => col.name === "Nome");
+export function getRowTitle(row: Row, cols: Col[]) {
+  const nameIndex = cols.findIndex((col) => col.title);
+
+  if (nameIndex === -1) {
+    return;
+  }
 
   const content = row.cells[nameIndex].content;
 
