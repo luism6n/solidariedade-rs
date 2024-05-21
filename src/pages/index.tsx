@@ -6,6 +6,7 @@ import { FilterDropdown } from "@/components/FilterDropdown";
 import { Header } from "@/components/Header";
 import { SearchBar } from "@/components/SearchBar";
 import ShareButton from "@/components/ShareButton";
+import { Spinner } from "@/components/Spinner";
 import { useData } from "@/hooks/useData";
 import { Col, Row } from "@/types";
 import { getRowId } from "@/utils/rows";
@@ -33,7 +34,11 @@ export default function Home() {
   if (data === null) {
     return <p>Nenhum dado encontrado.</p>;
   } else if (data === undefined) {
-    return <p>Carregando...</p>;
+    return (
+      <div className="h-screen">
+        <Spinner />;
+      </div>
+    );
   }
 
   const { cols, rows } = searchResults || data;

@@ -11,6 +11,7 @@ import { Place } from "./mapUtils";
 import { CardContent } from "@/components/CardContent";
 import { Card } from "@/components/Card";
 import { twMerge } from "tailwind-merge";
+import { Spinner } from "../Spinner";
 
 function MBPMap({
   places,
@@ -85,7 +86,11 @@ function MBPMap({
   }, [places, onMarkerClick]);
 
   if (markers.length === 0) {
-    return <p>Loading...</p>;
+    return (
+      <div className={className}>
+        <Spinner />;
+      </div>
+    );
   }
 
   return (

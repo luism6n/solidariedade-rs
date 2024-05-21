@@ -3,6 +3,7 @@ import { FilterDropdown } from "@/components/FilterDropdown";
 import { Header } from "@/components/Header";
 import { Map } from "@/components/Map";
 import { SearchBar } from "@/components/SearchBar";
+import { Spinner } from "@/components/Spinner";
 import { useData } from "@/hooks/useData";
 
 export default function MapPage() {
@@ -24,7 +25,7 @@ export default function MapPage() {
   if (data === null) {
     return <p>Nenhum dado encontrado.</p>;
   } else if (data === undefined) {
-    return <p>Carregando...</p>;
+    return <Spinner />;
   }
 
   return (

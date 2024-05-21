@@ -6,6 +6,7 @@ import { CardContent } from "@/components/CardContent";
 import { Header } from "@/components/Header";
 import { Map } from "@/components/Map";
 import ShareButton from "@/components/ShareButton";
+import { Spinner } from "@/components/Spinner";
 import { useData } from "@/hooks/useData";
 import { getRowId, getRowTitle } from "@/utils/rows";
 import { getUrlTo } from "@/utils/windowLocation";
@@ -30,7 +31,11 @@ function Item({ rowId }: { rowId: string }) {
   }
 
   if (data === undefined) {
-    return <div>Carregando...</div>;
+    return (
+      <div className="h-screen">
+        <Spinner />
+      </div>
+    );
   }
 
   const row = data.rows[0];

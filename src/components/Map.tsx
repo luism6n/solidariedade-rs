@@ -4,6 +4,7 @@ import { useScript } from "@/hooks/useScript";
 import { Sheet } from "@/types";
 import { useMemo } from "react";
 import { Place } from "./maps/mapUtils";
+import { Spinner } from "./Spinner";
 
 export function Map({
   data,
@@ -46,7 +47,11 @@ export function Map({
   }, [data]);
 
   if (!isLoaded) {
-    return <p>Carregando...</p>;
+    return (
+      <div className={className}>
+        <Spinner />
+      </div>
+    );
   }
 
   return <MBPMap className={className} places={places} popupCard={popupCard} />;
