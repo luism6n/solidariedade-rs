@@ -87,13 +87,13 @@ function Cards({ cols, rows }: { cols: Col[]; rows: Row[] }) {
         <Card key={i}>
           <CardContent cols={cols} row={row} renderAllInfo={false} />
           <Link
-            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
+            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-base text-mbp-green-700"
             href={`/places/${getRowId(row, cols)}`}
           >
-            <span className="text-xl text-mbp-green-700">Mais informações</span>
+            <span className="text-base text-mbp-green-700">Mais informações</span>
           </Link>
           <ShareButton
-            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-xl text-mbp-green-700"
+            className="flex justify-center rounded-md border border-mbp-green-700 p-2 text-base text-mbp-green-700"
             // share this site url with path /places/:id
             url={getUrlTo(`places/${getRowId(row, cols)}`)}
             title={getRowTitle(row, cols)}

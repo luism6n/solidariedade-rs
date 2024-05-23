@@ -8,7 +8,7 @@ export function SearchBar({
   onSearch: (query: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-md bg-mbp-green-700 p-lg laptop:gap-lg laptop:p-lg">
+    <div className="flex flex-col gap-md bg-mbp-green-700 px-lg pb-lg laptop:gap-lg laptop:p-lg">
       <form
         className="flex items-center gap-md rounded-md bg-white p-md"
         onSubmit={(e) => e.preventDefault()}
