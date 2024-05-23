@@ -8,7 +8,7 @@ export function TitleLogo() {
       className="font-extrabold uppercase text-white desktop:text-xl"
     >
       <Image
-        src="/logo.png"
+        src="/logo horizontal.png"
         alt={
           process.env.NEXT_PUBLIC_SITE_NAME ||
           "Logotipo da Campanha Popular da Solidariedade"
